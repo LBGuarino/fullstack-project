@@ -1,0 +1,21 @@
+nav.header {
+    width: 100vw;
+    height: 100px;
+    position: relative;
+    background-color: transparent;
+    border-bottom: 1px solid #d9d9d9;
+    box-sizing: border-box;
+    overflow: visible;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    color: #1e1e1e;
+    transition: all 0.2s ease;
+}
+
+nav.header:hover {
+    background-color: #d3dadf;
+}
+

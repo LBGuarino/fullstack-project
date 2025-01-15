@@ -13,12 +13,12 @@ interface IProduct {
 
 const productsToPreLoad: IProduct[] = [
   {
-    name: "iPhone 11",
-    price: 699,
+    name: "iPhone 16",
+    price: 899,
     description:
-      "Experience power and elegance with the iPhone 11: capture stunning moments with its dual-camera system, enjoy exceptional performance, and immerse yourself in a brilliant Liquid Retina display. Discover a world of possibilities in the palm of your hand!",
+      "Experience power and elegance with the iPhone 16: capture stunning moments with its dual-camera system, enjoy exceptional performance, and immerse yourself in a brilliant Liquid Retina display. Discover a world of possibilities in the palm of your hand!",
     image:
-      "https://www.apple.com/v/iphone-11/a/images/meta/og__f2j3dwkzna2u.png",
+      "https://cms-images.mmst.eu/2rj3gcd43pmw/6MjYQHpYxPHTSwV50yctCW/fcc28abf39e95044a0fa0c302e403978/iPhone_16_neu.png?q=80",
     categoryId: 1,
     stock: 10,
   },
@@ -28,7 +28,7 @@ const productsToPreLoad: IProduct[] = [
     description:
       "Embrace efficiency and sophistication with the MacBook Air: lightweight design meets powerful performance, stunning Retina display brings your work to life, and all-day battery life keeps you productive wherever you go. Elevate your computing experience with the MacBook Air.",
     image:
-      "https://www.apple.com/v/macbook-air/a/images/meta/og__d5k62k8b4qka.png",
+      "https://cms-images.mmst.eu/2rj3gcd43pmw/1u3Wtip50I011JDgsIo7IW/19c24271a602929521cf095cc390258e/Brandshop_Titelbild.png?q=80",
     categoryId: 2,
     stock: 10,
   },
@@ -38,7 +38,7 @@ const productsToPreLoad: IProduct[] = [
     description:
       "Unleash your creativity and productivity with the iPad Pro: powerful performance, stunning Liquid Retina display, and all-day battery life make the iPad Pro the perfect tool for work and play. Transform your ideas into reality with the iPad Pro.",
     image:
-      "https://www.apple.com/v/ipad-pro/a/images/meta/og__d8m6x7smkntm.png",
+      "https://cms-images.mmst.eu/2rj3gcd43pmw/6pKK5L43pmtFCYWcXjFft3/acbba82d830b92d52d3c23ede92764c4/ipad_air__1_.png?q=80",
     categoryId: 3,
     stock: 10,
   },
@@ -48,7 +48,7 @@ const productsToPreLoad: IProduct[] = [
     description:
       "Stay connected and healthy with the Apple Watch Series 6: track your workouts, monitor your health, and stay in touch with the people and information you care about most. Experience the future of health and wellness with the Apple Watch Series 6.",
     image:
-      "https://www.apple.com/v/apple-watch-series-6/a/images/meta/og__c1zv8c8n7q06.png",
+      "https://cms-images.mmst.eu/2rj3gcd43pmw/6KNfNNSQADGE8CRu42TVPo/f8d36d89842f357aa87a16ece93ea8d9/brand-cat-dsk-tab-mob_apple_watch_wei__.png?q=80",
     categoryId: 4,
     stock: 10,
   },
@@ -58,7 +58,7 @@ const productsToPreLoad: IProduct[] = [
     description:
       "Immerse yourself in sound with the AirPods Pro: active noise cancellation, transparency mode, and customizable fit make the AirPods Pro the perfect companion for music, calls, and everything in between. Elevate your audio experience with the AirPods Pro.",
     image:
-      "https://www.apple.com/v/airpods-pro/a/images/meta/og__c1zv8c8n7q06.png",
+      "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MP_134183984?x=320&y=320&format=jpg&quality=80&sp=yes&strip=yes&trim&ex=320&ey=320&align=center&resizesource&unsharp=1.5x1+0.7+0.02&cox=0&coy=0&cdx=320&cdy=320",
     categoryId: 5,
     stock: 10,
   },
@@ -68,7 +68,7 @@ const productsToPreLoad: IProduct[] = [
     description:
       "Elevate your home audio experience with the HomePod mini: immersive sound, intelligent assistant, and smart home hub make the HomePod mini the perfect addition to your home. Enjoy a world of music, news, and more with the HomePod mini.",
     image:
-      "https://www.apple.com/v/homepod-mini/a/images/meta/og__d5k62k8b4qka.png",
+      "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_142947063?x=320&y=320&format=jpg&quality=80&sp=yes&strip=yes&trim&ex=320&ey=320&align=center&resizesource&unsharp=1.5x1+0.7+0.02&cox=0&coy=0&cdx=320&cdy=320",
     categoryId: 6,
     stock: 10,
   },
