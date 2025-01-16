@@ -11,7 +11,6 @@ export default function LandingPage() {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [scrollY, setScrollY] = useState(0);
 
-  // Controlar la posición del scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -24,11 +23,10 @@ export default function LandingPage() {
     };
   }, []);
 
-  // Calcular opacidad y desenfoque dinámico
-  const blurIntensity = Math.min(scrollY / 300, 1); // Máximo 1
+  const blurIntensity = Math.min(scrollY / 300, 1);
   const backgroundStyle = {
     filter: `blur(${blurIntensity * 10}px)`,
-    opacity: `${1 - blurIntensity}`, // Reduce opacidad al hacer scroll
+    opacity: `${1 - blurIntensity}`,
     transition: "filter 0.3s ease, opacity 0.3s ease",
   };
 
@@ -44,7 +42,6 @@ export default function LandingPage() {
 
   return (
     <div className="relative w-screen">
-      {/* Sección superior con la imagen */}
       <div className="relative h-[100vh] overflow-hidden">
         <Image
           src="/4.jpg"
@@ -57,9 +54,9 @@ export default function LandingPage() {
           }}
           priority
         />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-gray-50"></div>
       </div>
 
-      {/* Carrusel */}
       <div className="relative z-10 bg-gray-50 py-8 px-4">
         <CarouselComponent>
           {products.map(({ id, name, price, image, description }) => (

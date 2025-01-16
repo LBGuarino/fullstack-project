@@ -50,11 +50,11 @@ export const CarouselComponent: React.FC<CarouselProps> = ({
       keyBoardControl={true}
       customTransition="all .5"
       transitionDuration={500}
-      containerClass="relative mx-auto max-w-7xl bg-transparent shadow-md rounded-lg overflow-hidden"
+      containerClass="relative mx-auto max-w-7xl bg-transparent rounded-lg overflow-hidden"
       removeArrowOnDeviceType={["tablet", "mobile"]}
       deviceType={deviceType}
       dotListClass="absolute bottom-4 left-0 right-0 flex justify-center gap-2"
-      itemClass="px-4"
+      itemClass="px-8"
       renderDotsOutside={true}
       arrows={false}
     >

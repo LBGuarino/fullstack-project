@@ -1,6 +1,7 @@
 nav.header {
-    width: 100vw;
-    height: 100px;
+    /* Ajusta el ancho para ocupar el 100% y maneja el padding en lugar de usar width:100vw */
+    width: 100%;
+    height: 80px; /* Disminuye la altura para que sea más compacto */
     position: relative;
     background-color: transparent;
     border-bottom: 1px solid #d9d9d9;
@@ -9,13 +10,13 @@ nav.header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 2rem;
+    justify-content: space-between; /* Espacio entre el logo y los menús */
+    padding: 0 2rem; /* Espaciado interno horizontal */
     color: #1e1e1e;
     transition: all 0.2s ease;
-}
-
-nav.header:hover {
+  }
+  
+  nav.header:hover {
     background-color: #d3dadf;
-}
-
+  }
+  

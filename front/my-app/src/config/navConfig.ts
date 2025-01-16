@@ -1,17 +1,10 @@
 export interface NavItem {
     text: string;
     path: string;
+    icon?: string
 }
 
 const NavConfig: NavItem[] = [
-    {
-        text: 'Home',
-        path: '/',
-    },
-    {
-        text: 'Products',
-        path: '/products',
-    },
     {
         text: 'Support',
         path: '/support',

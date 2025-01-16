@@ -11,10 +11,8 @@ const categoriesToPreLoad: ICategory[] = [
     { name: 'Laptops' },
     { name: 'Tablets' },
     { name: 'Headphones' },
-    { name: 'Cameras' },
-    { name: 'Printers' },
-    { name: 'Monitors' },
-    { name: 'Storage' },
+    { name: 'Displays' },
+    { name: 'Watches' },
     { name: 'Accessories' }
 ];
 
