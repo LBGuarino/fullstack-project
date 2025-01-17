@@ -1,9 +1,24 @@
+'use client'
+import loginUser from "@/helpers/loginUser";
+import { LoginFormInputs, loginSchema } from "@/helpers/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
-// components/LoginForm.tsx
 export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormInputs>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = (data: LoginFormInputs) => {
+    loginUser(data);
+  }
     return (
-      <form className="flex flex-col gap-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
         <div>
           <label
             htmlFor="email"
@@ -12,6 +27,7 @@ export default function LoginForm() {
             Email address
           </label>
           <input
+            {...register('email')}
             type="email"
             name="email"
             id="email"
@@ -30,7 +46,11 @@ export default function LoginForm() {
             "
             placeholder="you@example.com"
             />
-
+            {errors.email && (
+              <p className="text-red-500 text-sm">
+                {errors.email.message}
+              </p>
+            )}
         </div>
   
         <div>
@@ -41,6 +61,7 @@ export default function LoginForm() {
             Password
           </label>
           <input
+            {...register('password')}
             type="password"
             name="password"
             id="password"
@@ -59,6 +80,11 @@ export default function LoginForm() {
             "
             placeholder="••••••••"
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm">
+                {errors.password.message}
+              </p>
+            )}            
           <Link href="/forgot-password" className="text-sm text-gray-500 hover:text-gray-700">
               Forgot your password?
           </Link>
