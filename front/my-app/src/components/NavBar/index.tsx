@@ -1,14 +1,20 @@
+'use client';
 import Link from 'next/link';
 import styles from './index.module.css';
 import NavConfig, { NavItem } from '@/config/navConfig';
 import DropdownMenu, { DropdownMenuProps } from '../DropdownMenu';
-import { NavConfigUser } from '@/config/navConfigUser';
+import { useAuth } from '@/context/usersContext';
 
 interface NavBarProps {
   dropdownProps: DropdownMenuProps;
 }
 
 export default function NavBar({ dropdownProps }: NavBarProps) {
+  const { user } = useAuth();
+  console.log(user);
+  const isLoggedIn = user?.id;
+  console.log(isLoggedIn);
+
   return (
     <nav className={styles.header}>
       <div className="flex items-center">
@@ -36,22 +42,35 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
           </li>
         ))}
       </ul>
-
+      
       <ul className="flex flex-row items-center justify-end gap-4">
-        {NavConfigUser.map((el: NavItem) => (
+      {isLoggedIn ? (
           <li 
             className="flex flex-row gap-2" 
-            key={`${el.text}-${el.path}`}
+            key="login-icon"
           >
-            <Link href={el.path}>
+            <Link href="/login">
               <img 
-                src={el.icon} 
+                src="/user.svg" 
                 className="w-5 h-5 hover:transform hover:scale-125 transition-all duration-200 ease-in-out"
-                alt={el.text} 
+                alt="login"
               />
             </Link>
           </li>
-        ))}
+        ) : (
+          <li 
+            className="flex flex-row gap-2" 
+            key="shopping-bag-icon"
+          >
+            <Link href="/shopping-bag">
+              <img 
+                src="/shopbag.svg" 
+                className="w-5 h-5 hover:transform hover:scale-125 transition-all duration-200 ease-in-out"
+                alt="shopping bag"
+              />
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/envs";
 
 const checkLogin = async (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization;
+  const token = req.cookies;
   if (!token) {
     return next(new ClientError("Token is required"));
   }
@@ -15,7 +15,6 @@ const checkLogin = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     next(new ClientError("Invalid token"));
   }
-  console.log("Token Check OK");
 
   next();
 };

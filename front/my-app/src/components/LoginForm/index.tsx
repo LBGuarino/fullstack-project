@@ -1,11 +1,20 @@
 'use client'
-import loginUser from "@/helpers/loginUser";
+import { useAuth } from "@/context/usersContext";
 import { LoginFormInputs, loginSchema } from "@/helpers/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const { login } = useAuth();
+  const router = useRouter();
+  
   const {
     register,
     handleSubmit,
@@ -14,10 +23,138 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormInputs) => {
-    loginUser(data);
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess('');
+        router.push('/');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+      await login(data);
+      setSuccess('Login successful');
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const errMessage =
+          err.response?.data?.message || err.message || 'Unexpected error';
+        setError(errMessage);
+      } else {
+        setError('An unknown error occurred');
+      }
+    }
   }
     return (
+      <>
+      {error && (
+        <div
+          className="
+            fixed top-0 left-0 w-full h-full 
+            bg-black bg-opacity-50 
+            backdrop-blur-sm
+            flex items-center 
+            justify-center
+            z-50
+          "
+        >
+          <div
+            className="
+              relative
+              bg-red-50 
+              border-l-4 
+              border-red-600 
+              text-red-700 
+              px-6 
+              py-4 
+              rounded-md 
+              max-w-md 
+              w-full 
+              mx-4 
+              shadow-md
+            "
+          >
+            <button
+              onClick={() => setError('')}
+              className="
+                absolute 
+                top-2 
+                right-2
+                text-red-600
+                hover:text-red-800
+                transition
+              "
+            >
+              &times;
+            </button>
+            <div className="flex items-center mb-2">
+              <h2 className="font-bold text-red-700">Error!</h2>
+            </div>
+            <p className="text-sm">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {success && (
+        <div
+          className="
+            fixed top-0 left-0 w-full h-full 
+            bg-black bg-opacity-50 
+            backdrop-blur-sm
+            flex items-center 
+            justify-center
+            z-50
+          "
+        >
+          <div
+            className="
+              relative
+              bg-green-50 
+              border-l-4 
+              border-green-600 
+              text-green-700 
+              px-6 
+              py-4 
+              rounded-md 
+              max-w-md 
+              w-full 
+              mx-4 
+              shadow-md
+            "
+          >
+            <button
+              onClick={() => setSuccess('')}
+              className="
+                absolute 
+                top-2 
+                right-2
+                text-green-600
+                hover:text-green-800
+                transition
+              "
+            >
+              &times;
+            </button>
+            <div className="flex items-center mb-2">
+              <h2 className="font-bold text-green-700">Success!</h2>
+            </div>
+            <p className="text-sm">{success}</p>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
         <div>
           <label
@@ -63,6 +200,7 @@ export default function LoginForm() {
           <input
             {...register('password')}
             type="password"
+            autoComplete="new-password"
             name="password"
             id="password"
             className="
@@ -107,6 +245,7 @@ export default function LoginForm() {
           </Link>
         </div>
       </form>
+      </>
     );
   }
   

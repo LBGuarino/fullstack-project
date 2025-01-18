@@ -48,6 +48,6 @@ export const loginUserService = async (
       token,
     };
   } else {
-    throw new ClientError("Invalid password");
+    throw new ClientError("Invalid email or password");
   }
 };
