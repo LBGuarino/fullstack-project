@@ -2,12 +2,12 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Order } from "./Order";
 import { Category } from "./Category";
+import { CartItem } from "./CartItem";
 
 @Entity({ name: "products" })
 export class Product {
@@ -35,4 +35,7 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   @JoinColumn({ name: "categoryId" })
   category: Category;
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product)
+  cartItems: CartItem[];
 }

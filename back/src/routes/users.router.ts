@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import validateUserRegister from "../middlewares/userRegister.middleware";
 import validateUserLogin from "../middlewares/userLogin.middleware";
-import { getSession, login, logout, registerUser } from "../controllers/user.controller";
+import { addToCart, getCart, getSession, login, logout, registerUser, removeFromCart } from "../controllers/user.controller";
 import checkLogin from "../middlewares/checkLogin.middleware";
 import { OrderRepository } from "../repositories/order.repository";
 
@@ -22,6 +22,12 @@ usersRouter.get("/orders", checkLogin, async (req: Request, res: Response) => {
 
   res.send(orders);
 });
+
+usersRouter.get('/cart', checkLogin, getCart);
+
+usersRouter.post('/cart', checkLogin, addToCart);
+
+usersRouter.delete("/cart/:productId", checkLogin, removeFromCart);
 
 usersRouter.get("/session", getSession);
 

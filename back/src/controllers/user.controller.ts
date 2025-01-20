@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { catchedController } from "../utils/catchedController";
 import {
+  addToCartService,
+  getCartService,
   loginUserService,
   registerUserService,
+  removeFromCartService,
 } from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/envs";
 import { UserRepository } from "../repositories/user.repository";
+import { ClientError } from "../utils/errors";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -69,8 +73,40 @@ export const getSession = catchedController(async (req: Request, res: Response) 
   }
 });
 
-
 export const logout = catchedController(async (req: Request, res: Response) => {
   res.clearCookie('token', { path: '/' });
   return res.json({ message : 'Logout successful' });
+});
+
+export const getCart = catchedController(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    throw new ClientError("User not authenticated", 401);
+  }
+  const cart = await getCartService({ userId });
+  res.status(200).send(cart);
+});
+
+export const addToCart = catchedController(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const { productId, quantity } = req.body;
+  if (!userId) {
+    throw new ClientError("User not authenticated", 401);
+  }
+
+  const cart = await addToCartService({ userId, productId, quantity });
+  res.status(200).send(cart);
+});
+
+export const removeFromCart = catchedController(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const productId = parseInt(req.params.productId, 10);
+  if (!userId) {
+    throw new ClientError("User not authenticated", 401);
+  }
+  if (isNaN(productId)) {
+    throw new ClientError("Invalid product ID", 400);
+  }
+  const cart = await removeFromCartService({ productId, userId });
+  res.status(200).send(cart);
 });

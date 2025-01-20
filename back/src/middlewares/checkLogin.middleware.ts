@@ -12,15 +12,19 @@ const checkLogin = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    if (!decoded.userId) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
-    req.body.userId = decoded.userId;
+    req.user = { id: decoded.userId };
+    next();
   } catch (error) {
-    next(new ClientError("Invalid token"));
+    next(new ClientError("Invalid token", 401));
   }
-
-  next();
 };
 
 export default checkLogin;
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { id: number };
+    }
+  }
+};

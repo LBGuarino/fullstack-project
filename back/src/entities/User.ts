@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Credential } from "./Credential";
 import { Order } from "./Order";
+import { Cart } from "./Cart";
 
 enum Role {
     ADMIN = "admin",
@@ -42,5 +43,9 @@ export class User {
 
     @OneToMany(() => Order, order => order.user)
     orders: Order[];
+
+    @OneToOne(() => Cart, (cart) => cart.user, { cascade: true })
+    @JoinColumn()
+    cart: Cart;
 }
 

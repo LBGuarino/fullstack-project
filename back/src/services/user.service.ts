@@ -9,6 +9,10 @@ import {
 } from "./credential.service";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/envs";
+import { Cart } from "../entities/Cart";
+import { CartRepository } from "../repositories/cart.repository";
+import { ProductRepository } from "../repositories/product.repository";
+import { CartItemRepository } from "../repositories/cartItem.repository";
 
 export const checkUserExists = async (email: string): Promise<boolean> => {
   const user = await UserRepository.findOneBy({ email });
@@ -50,4 +54,65 @@ export const loginUserService = async (
   } else {
     throw new ClientError("Invalid email or password");
   }
+};
+
+export const getCartService = async ({ userId }: { userId: number }): Promise<Cart> => {
+  const userCart = await CartRepository.findOne({
+    where: { user: { id: userId } },
+    relations: ["items", "items.product"],
+  });
+  if (!userCart) {
+    throw new ClientError("Cart not found");
+  }
+  return userCart;
+};
+
+export const addToCartService = async ({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }): Promise<Cart> => {
+  const userCart = await CartRepository.findOne({
+    where: { user: { id: userId } },
+    relations: ["items", "items.product"],
+  });
+  if (!userCart) {
+    throw new ClientError("Cart not found");
+  }
+  const product = await ProductRepository.findOne({
+    where: { id: productId },
+    relations: ["category"],
+  });
+  if (!product) {
+    throw new ClientError("Product not found");
+  }
+
+  let cartItem = userCart.items.find((item) => item.product.id === productId);
+  if (cartItem) {
+    cartItem.quantity += quantity;
+  } else {
+    cartItem = CartItemRepository.create({
+      cart: userCart,
+      product,
+      quantity,
+    });
+    userCart.items.push(cartItem);
+  }
+
+  await CartItemRepository.save(cartItem);
+  return userCart;
+};
+
+export const removeFromCartService = async ({ productId, userId }: { productId: number, userId: number }): Promise<Cart> => {
+  const userCart = await CartRepository.findOne({
+    where: { user: { id: userId } },
+    relations: ["items", "items.product"],
+  });
+  if (!userCart) {
+    throw new ClientError("Cart not found");
+  }
+
+  const cartItem = userCart.items.find((item) => item.product.id === productId);
+  if (!cartItem) {
+    throw new ClientError("Product not in cart");
+  }
+
+  await CartItemRepository.remove(cartItem);
+  return userCart;
 };
