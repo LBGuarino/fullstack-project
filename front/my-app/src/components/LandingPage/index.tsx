@@ -62,6 +62,7 @@ export default function LandingPage() {
           {products.map(({ id, name, price, image, description }) => (
             <LandingPagePC
               key={id}
+              id={id}
               name={name}
               price={price}
               image={image}

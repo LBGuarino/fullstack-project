@@ -33,6 +33,7 @@ export default function SignupForm() {
     if (success) {
       const timer = setTimeout(() => {
         setSuccess('');
+        window.location.href = '/login';
       }, 3000);
       return () => clearTimeout(timer);
     }

@@ -1,6 +1,9 @@
+'use client';
+import { useCartContext } from "@/context/CartContext";
 import Image from "next/image";
 
 export interface LandingPagePCProps {
+    id: number;
     name: string;
     price: number;
     image: string;
@@ -8,6 +11,7 @@ export interface LandingPagePCProps {
   }
   
   export const LandingPagePC: React.FC<LandingPagePCProps> = ({
+    id,
     name,
     price,
     image,

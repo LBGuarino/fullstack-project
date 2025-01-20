@@ -29,6 +29,8 @@ export const registerUserService = async (
   });
   user.credential = credential;
   await UserRepository.save(user);
+  const cart = CartRepository.create({id: user.id, user});
+  await CartRepository.save(cart);
   return user;
 };
 
