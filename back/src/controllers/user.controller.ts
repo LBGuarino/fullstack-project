@@ -4,6 +4,15 @@ import {
   loginUserService,
   registerUserService,
 } from "../services/user.service";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config/envs";
+import { UserRepository } from "../repositories/user.repository";
+
+const isProduction = process.env.NODE_ENV === "production";
+
+export interface JwtPayload {
+  userId: number;
+}
 
 export const registerUser = catchedController(
   async (req: Request, res: Response) => {
@@ -24,8 +33,8 @@ export const login = catchedController(async (req: Request, res: Response) => {
   const user = await loginUserService({ email, password });
   res.cookie('token', user.token, {
     httpOnly: true,
-    secure: false,
-    sameSite: 'none',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
   })
@@ -34,6 +43,32 @@ export const login = catchedController(async (req: Request, res: Response) => {
     user: user.user,
   });
 });
+
+export const getSession = catchedController(async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies?.token;
+
+    if (!token) {
+      return res.status(401).json({ message: "No session found" });
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+
+    const user = await UserRepository.findOne({
+      where: { id: decoded.userId },
+      relations: ["orders"],
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid session" });
+    }
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid or expired session" });
+  }
+});
+
 
 export const logout = catchedController(async (req: Request, res: Response) => {
   res.clearCookie('token', { path: '/' });

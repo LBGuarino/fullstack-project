@@ -4,7 +4,6 @@ import { LoginFormInputs, loginSchema } from "@/helpers/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -13,7 +12,6 @@ export default function LoginForm() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const { login } = useAuth();
-  const router = useRouter();
   
   const {
     register,
@@ -36,8 +34,8 @@ export default function LoginForm() {
     if (success) {
       const timer = setTimeout(() => {
         setSuccess('');
-        router.push('/');
-      }, 3000);
+        window.location.href = '/';
+     }, 3000);
       return () => clearTimeout(timer);
     }
   }, [success]);

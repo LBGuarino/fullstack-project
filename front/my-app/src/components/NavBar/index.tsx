@@ -10,10 +10,12 @@ interface NavBarProps {
 }
 
 export default function NavBar({ dropdownProps }: NavBarProps) {
-  const { user } = useAuth();
-  console.log(user);
+  const { user, logout } = useAuth();
   const isLoggedIn = user?.id;
-  console.log(isLoggedIn);
+
+  const handleLogout = () => {
+    logout();
+  }
 
   return (
     <nav className={styles.header}>
@@ -44,7 +46,7 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
       </ul>
       
       <ul className="flex flex-row items-center justify-end gap-4">
-      {isLoggedIn ? (
+      {!isLoggedIn ? (
           <li 
             className="flex flex-row gap-2" 
             key="login-icon"
@@ -58,6 +60,7 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
             </Link>
           </li>
         ) : (
+          <>
           <li 
             className="flex flex-row gap-2" 
             key="shopping-bag-icon"
@@ -70,6 +73,8 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
               />
             </Link>
           </li>
+          <button onClick={handleLogout}>Logout</button>
+          </>
         )}
       </ul>
     </nav>

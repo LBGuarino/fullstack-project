@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import validateUserRegister from "../middlewares/userRegister.middleware";
 import validateUserLogin from "../middlewares/userLogin.middleware";
-import { login, logout, registerUser } from "../controllers/user.controller";
+import { getSession, login, logout, registerUser } from "../controllers/user.controller";
 import checkLogin from "../middlewares/checkLogin.middleware";
 import { OrderRepository } from "../repositories/order.repository";
 
@@ -22,5 +22,7 @@ usersRouter.get("/orders", checkLogin, async (req: Request, res: Response) => {
 
   res.send(orders);
 });
+
+usersRouter.get("/session", getSession);
 
 export default usersRouter;

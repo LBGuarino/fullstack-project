@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useContext, ReactNode } from "react";
+import { createContext, useState, useContext, ReactNode, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthProviderProps, IAuthContextProps } from "./AuthContextProps";
 import { ILoggedUser } from "@/interfaces/ILoggedUser";
@@ -19,6 +19,30 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const checkSession = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:3001/users/session", {
+        withCredentials: true,
+      });
+      const { user } = response.data;
+      setUser(user);
+    } catch (error) {
+      const err = error as AxiosError;
+      if (err.response?.status === 401) {
+        setUser(null);
+      } else {
+      setError(err.message || "Unexpected error");
+      console.error("error checking session:", error)}
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkSession();
+  }, []);
+
   const login = async (userData: ILogin) => {
     try {
       setLoading(true);
@@ -29,7 +53,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       );
 
       const { user } = response.data;
-      console.log(user);
       setUser(user);
     } catch (error) {
       const err = error as AxiosError;
