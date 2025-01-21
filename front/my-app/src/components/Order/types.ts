@@ -1,3 +1,6 @@
+import { OrderFormInputs } from "@/helpers/validations";
+import { FieldErrors, UseFormRegister, UseFormSetError, UseFormSetValue } from "react-hook-form";
+
 export interface PaymentDetailsProps {
     cardNumber: string;
     expiryDate: string;
@@ -14,14 +17,17 @@ export interface OrderDetailsProps {
 }
 
 export interface OrderFormProps {
-    orderDetails: OrderDetailsProps;
-    onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    register: UseFormRegister<OrderFormInputs>;
+    errors: FieldErrors<OrderFormInputs>;
+    watchPickupPoint: number | null;
+    setValue: UseFormSetValue<OrderFormInputs>;
     onContinueToCheckout: () => void;
 }
 
 export interface CheckoutFormProps {
-    paymentDetails: PaymentDetailsProps;
-    onPaymentDetailsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    register: UseFormRegister<OrderFormInputs>;
+    errors: FieldErrors<OrderFormInputs>;
+    setValue: UseFormSetValue<OrderFormInputs>;
     onBackToForm: () => void;
     onSubmitOrder: () => void;
 }

@@ -1,14 +1,16 @@
 import { CheckoutFormProps } from "../Order/types";
 
 export default function CheckoutForm({
-    paymentDetails,
-    onPaymentDetailsChange,
+    register,
+    errors,
+    setValue,
     onBackToForm,
     onSubmitOrder,
 } : CheckoutFormProps) {
+
     return (
         <div className="p-4 h-full w-full overflow-y-auto max-h-screen">
-            <form className="flex flex-col gap-6 p-4">
+            <form className="flex flex-col gap-6 p-4" onSubmit={onSubmitOrder}>
                 <h2 className="text-xl font-semibold text-gray-700 mb-6">Checkout</h2>
 
                 <div>
@@ -19,11 +21,10 @@ export default function CheckoutForm({
                         Card Number
                     </label>
                     <input
+                        {...register("paymentDetails.cardNumber")}
                         type="text"
-                        name="card-number"
+                        name="cardNumber"
                         id="card-number"
-                        value={paymentDetails.cardNumber}
-                        onChange={onPaymentDetailsChange}
                         className="
                             w-full 
                             rounded-lg
@@ -39,6 +40,9 @@ export default function CheckoutForm({
                         "
                         placeholder="1234 5678 9012 3456"
                     />
+                    {errors.paymentDetails?.cardNumber && (
+                    <p className="text-red-500 text-sm">{errors.paymentDetails.cardNumber.message}</p>
+                    )}
                 </div>
 
                 <div>
@@ -49,11 +53,10 @@ export default function CheckoutForm({
                         Expiry Date
                     </label>
                     <input
+                        {...register("paymentDetails.expiryDate")}
                         type="text"
-                        name="expiry"
+                        name="expiryDate"
                         id="expiry"
-                        value={paymentDetails.expiryDate}
-                        onChange={onPaymentDetailsChange}
                         className="
                             w-full 
                             rounded-lg
@@ -69,6 +72,9 @@ export default function CheckoutForm({
                         "
                         placeholder="MM/YY"
                     />
+                    {errors.paymentDetails?.expiryDate && (
+                    <p className="text-red-500 text-sm">{errors.paymentDetails.expiryDate.message}</p>
+                    )}
                 </div>
 
                 <div>
@@ -79,11 +85,10 @@ export default function CheckoutForm({
                         CVV
                     </label>
                     <input
+                        {...register("paymentDetails.cvv")}
                         type="text"
                         name="cvv"
                         id="cvv"
-                        value={paymentDetails.cvv}
-                        onChange={onPaymentDetailsChange}
                         className="
                             w-full 
                             rounded-lg
@@ -99,6 +104,9 @@ export default function CheckoutForm({
                         "
                         placeholder="123"
                     />
+                    {errors.paymentDetails?.cvv && (
+                    <p className="text-red-500 text-sm">{errors.paymentDetails.cvv.message}</p>
+                    )}
                 </div>
 
                 <div className="flex justify-between mt-6">
@@ -120,7 +128,6 @@ export default function CheckoutForm({
                     </button>
                     <button
                         type="submit"
-                        onClick={onSubmitOrder}
                         className="
                             bg-cyan-700 
                             text-white
@@ -128,8 +135,8 @@ export default function CheckoutForm({
                             hover:duration-200 ease-in-out
                             font-semibold 
                             rounded-lg 
-                            py-3 
-                            px-6 
+                            py-2
+                            px-3 
                         "
                     >
                         Submit Order

@@ -1,12 +1,23 @@
+import { OrderFormInputs, orderFormSchema } from "@/helpers/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
 interface ShipmentCheckboxProps {
-    selectedOption: "delivery" | "pickup" | null;
-    setSelectedOption: (option: "delivery" | "pickup" | null) => void;
+    selectedOption: "delivery" | "pickup" ;
+    setSelectedOption: (option: "delivery" | "pickup" ) => void;
 }
 
 export const ShipmentCheckbox = ({ selectedOption, setSelectedOption }: ShipmentCheckboxProps) => {
     const handleOptionChange = (option: "delivery" | "pickup") => {
         setSelectedOption(option);
     };
+
+    const {
+        register,
+        formState: { errors },
+    } = useForm<OrderFormInputs>({
+        resolver: zodResolver(orderFormSchema),
+    });
     
     return (
         <>

@@ -1,46 +1,50 @@
 'use client';
 import { useState } from "react";
-import { OrderDetailsProps } from "./types";
 import OrderForm from "../OrderForm";
 import CheckoutForm from "../CheckoutForm";
+import { useForm } from "react-hook-form";
+import { OrderFormInputs, orderFormSchema } from "@/helpers/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 
 export default function Order() {
     const [isCheckout, setIsCheckout] = useState(false);
-    const [orderDetails, setOrderDetails] = useState<OrderDetailsProps>({
-        name: "",
-        phone: "",
-        address: "",
-        email: "",
-        pickupPoint: null,
-        paymentDetails: {
-            cardNumber: "",
-            expiryDate: "",
-            cvv: "",
-        },
-    });
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setOrderDetails((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
-    const handlePaymentDetailsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setOrderDetails((prev) => ({
-            ...prev,
-            paymentDetails: {
-                ...prev.paymentDetails,
-                [name]: value,
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useForm<OrderFormInputs>({
+        resolver: zodResolver(orderFormSchema),
+        defaultValues: {
+            name: "",
+            phone: "",
+            address: {
+                street: "",
+                city: "",
+                postalCode: "",
+                country: "",
             },
-        }));
+            email: "",
+            pickupPoint: null,
+            paymentDetails: {
+                cardNumber: "",
+                expiryDate: "",
+                cvv: "",
+        },
+    },
+});
+    
+    const watchPickupPoint = watch("pickupPoint") ?? null;
+
+    const handleSubmitOrder = (data: OrderFormInputs) => {
+        console.log(`order submitted: ${JSON.stringify(data)}`);
     };
 
-    const handleSubmitOrder = () => {
-        console.log("Order submitted:", orderDetails);
-    };
+    const handleContinueToPayment = handleSubmit(() => {
+        setIsCheckout(true);
+    })
 
     return (
         <div className="relative overflow-hidden h-full w-full">
@@ -50,9 +54,11 @@ export default function Order() {
                 }`}
             >
                 <OrderForm
-                    orderDetails={orderDetails}
-                    onInputChange={handleInputChange}
-                    onContinueToCheckout={() => setIsCheckout(true)}
+                    register={register}
+                    errors={errors}
+                    watchPickupPoint={watchPickupPoint}
+                    setValue={setValue}
+                    onContinueToCheckout={handleContinueToPayment}
                 />
             </div>
 
@@ -62,10 +68,11 @@ export default function Order() {
                 }`}
             >
                 <CheckoutForm
-                    paymentDetails={orderDetails.paymentDetails}
-                    onPaymentDetailsChange={handlePaymentDetailsChange}
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}       
                     onBackToForm={() => setIsCheckout(false)}
-                    onSubmitOrder={handleSubmitOrder}
+                    onSubmitOrder={handleSubmit(handleSubmitOrder)}
                 />
             </div>
         </div>

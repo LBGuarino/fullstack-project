@@ -3,28 +3,69 @@ import { ShipmentCheckbox } from "../ShipmentCheckbox";
 import AddressAutocomplete from "../GoogleAddress";
 import { OrderFormProps } from "../Order/types";
 import { pickupPoints } from "./config";
+import { useForm } from "react-hook-form";
+import { OrderFormInputs, orderFormSchema } from "@/helpers/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function OrderForm({
-    orderDetails,
-    onInputChange,
+    register,
+    errors,
+    watchPickupPoint,
+    setValue,
     onContinueToCheckout,
 }: OrderFormProps) {
 
+    const handleShipmentChange = (option: "delivery" | "pickup") => {
+        if (option === "pickup") {
+            setValue('pickupPoint', pickupPoints[0].id);
+            setValue('address', undefined);
+        } else {
+            setValue('pickupPoint', null);
+        }
+    }
+
     return (
     <div className="p-4 h-full w-full overflow-y-auto max-h-screen">
-        <form className="flex flex-col gap-6 p-4">
+        <form className="flex flex-col gap-6 p-4" onSubmit={onContinueToCheckout}>
             <div className="flex justify-center items-center gap-4 p-4">
                 <ShipmentCheckbox 
-                    selectedOption={orderDetails.pickupPoint ? "pickup" : "delivery"} 
-                    setSelectedOption={(option) => onInputChange({ 
-                        target: { 
-                            name: "pickupPoint", 
-                            value: option === "pickup" ? pickupPoints[0].id : null,
-                     }, 
-                    } as unknown as React.ChangeEvent<HTMLInputElement>)}
+                    selectedOption={watchPickupPoint ? "pickup" : "delivery"} 
+                    setSelectedOption={handleShipmentChange}
                 />
             </div>
 
+            <div>
+                <label
+                    htmlFor="email"
+                    className="block text-base font-normal text-gray-700 mb-3"
+                >
+                    Email
+                </label>
+                <input
+                    {...register("email")}
+                    type="email"
+                    name="email"
+                    id="email"
+                    className="
+                        w-full 
+                        rounded-lg
+                        border-0
+                        border-b
+                        border-gray-300
+                        bg-transparent
+                        focus:border-cyan-700
+                        focus:ring-0
+                        placeholder-gray-400
+                        text-sm
+                        py-2
+                    "
+                    placeholder="you@example.com"
+                />
+                {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+                )}
+
+            </div>
             <div>
                 <label
                     htmlFor="name"
@@ -33,10 +74,9 @@ export default function OrderForm({
                     Full Name
                 </label>
                 <input
+                    {...register("name")}
                     type="text"
                     name="name"
-                    value={orderDetails.name}
-                    onChange={onInputChange}
                     id="name"
                     className="
                         w-full 
@@ -53,6 +93,10 @@ export default function OrderForm({
                     "
                     placeholder="John Doe"
                 />
+                {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name.message}</p>
+                )}
+
             </div>
             <div>
                 <label
@@ -62,10 +106,9 @@ export default function OrderForm({
                     Phone Number
                 </label>
                 <input
+                    {...register("phone")}
                     type="text"
                     name="phone"
-                    value={orderDetails.phone}
-                    onChange={onInputChange}
                     id="phone"
                     className="
                         w-full 
@@ -82,10 +125,13 @@ export default function OrderForm({
                     "
                     placeholder="(555) 123-4567"
                 />
+                {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
             </div>
 
-            {orderDetails.pickupPoint === null && <AddressAutocomplete />}
-            {orderDetails.pickupPoint && (
+            {watchPickupPoint === null && <AddressAutocomplete errors={errors} register={register} setValue={setValue} />}
+            {watchPickupPoint && (
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold text-gray-800 mb-4">Available Pickup Points</h2>
                     <ul className="space-y-4">
@@ -101,9 +147,11 @@ export default function OrderForm({
                                 </div>
                                 <input
                                     type="checkbox"
+                                    {...register('pickupPoint')}
+                                    value={point.id}
                                     className="w-4 h-4 text-cyan-700 border-gray-300 rounded-xl focus:ring-cyan-600"
-                                    checked={orderDetails.pickupPoint === point.id}
-                                    onChange={() => onInputChange({ target: { name: "pickupPoint", value: point.id } } as unknown as React.ChangeEvent<HTMLInputElement>)}
+                                    checked={Number(watchPickupPoint) === point.id}
+                                    onChange={() => setValue('pickupPoint', point.id)}
                                     aria-label={`Select ${point.name}`}
                                 />
                             </li>
