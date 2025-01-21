@@ -13,10 +13,10 @@ export default function ProductCounter({ quantity, setQuantity }: ProductCounter
         }};
 
     return (
-        <div>
+        <div className="flex items-center gap-4">
             <button
             onClick={handleDecrement}
-            className="bg-gray-200 rounded-full p-2 text-black"
+            className="bg-gray-300 w-8 h-8 rounded-full flex items-center justify-center text-lg font-bold text-gray-700 hover:bg-gray-400 transition"
             aria-label="decrement quantity"
             >
                 -
@@ -24,7 +24,7 @@ export default function ProductCounter({ quantity, setQuantity }: ProductCounter
             <span>{quantity}</span>
             <button
             onClick={handleIncrement}
-            className="bg-gray-200 rounded-full p-2 text-black"
+            className="bg-gray-300 w-8 h-8 rounded-full flex items-center justify-center text-lg font-bold text-gray-700 hover:bg-gray-400 transition"
             aria-label="increment quantity"
             >
                 +
