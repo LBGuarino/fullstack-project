@@ -1,33 +1,59 @@
 import { InputMask } from "@react-input/mask";
 import { CheckoutFormProps } from "../Order/types";
+import { useElements, useStripe, CardElement } from "@stripe/react-stripe-js";
+import { useState } from "react";
+import { set } from "zod";
 
 export default function CheckoutForm({
-    register,
-    errors,
     onBackToForm,
     onSubmitOrder,
 }: CheckoutFormProps) {
+    const stripe = useStripe();
+    const elements = useElements();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if (!stripe || !elements) {
+            return;
+        }
+        setIsProcessing(true);
+        setErrorMessage("");
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) return;
+        
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            card: cardElement,
+            type: "card"
+        });
+
+        if (error) {
+            console.error(error);
+            setErrorMessage(error.message ?? "An error occurred");
+            setIsProcessing(false);
+        } else {
+            onSubmitOrder({ paymentMethodId: paymentMethod.id });
+        }
+    };
 
     return (
         <div className="p-4 h-full w-full overflow-y-auto max-h-screen">
-            <form className="flex flex-col gap-6 p-4" onSubmit={onSubmitOrder}>
+            <form className="flex flex-col gap-6 p-4" onSubmit={handleSubmit}>
                 <h2 className="text-xl font-semibold text-gray-700 mb-6">Checkout</h2>
 
                 <div>
                     <label
-                        htmlFor="card-number"
+                        htmlFor="card-element"
                         className="block text-base font-normal text-gray-700 mb-3"
                     >
-                        Card Number
+                        Card Details
                     </label>
-                    <InputMask
-                        mask="____ ____ ____ ____"
-                        replacement={{ _: /\d/ }}
-                        {...register("paymentDetails.cardNumber")}
-                        type="text"
-                        name="paymentDetails.cardNumber"
-                        id="card-number"
-                        className="
+                    <CardElement
+                    id="card-element"
+                    className="
                         w-full 
                         rounded-lg
                         border-0
@@ -40,80 +66,25 @@ export default function CheckoutForm({
                         text-sm
                         py-2
                     "
-                        placeholder="1234 5678 9012 3456"
-                    />
-                    {errors.paymentDetails?.cardNumber && (
-                        <p className="text-red-500 text-sm">{errors.paymentDetails.cardNumber.message}</p>
-                    )}
+                    options={{
+                        style: {
+                            base: {
+                                fontSize: '16px',
+                                color: '#424770',
+                                '::placeholder': {
+                                    color: '#aab7c4',
+                                },
+                            },
+                            invalid: {
+                                color: '#9e2146',
+                            },
+                        },
+                    }}
+                    />                    
                 </div>
-
-                <div>
-                    <label
-                        htmlFor="expiry"
-                        className="block text-base font-normal text-gray-700 mb-3"
-                    >
-                        Expiry Date
-                    </label>
-                    <InputMask
-                        mask="__/__"
-                        replacement={{ _: /\d/ }}
-                        {...register("paymentDetails.expiryDate")}
-                        type="text"
-                        name="paymentDetails.expiryDate"
-                        id="expiry"
-                        className="
-                            w-full 
-                            rounded-lg
-                            border-0
-                            border-b
-                            border-gray-300
-                            bg-transparent
-                            focus:border-cyan-700
-                            focus:ring-0
-                            placeholder-gray-400
-                            text-sm
-                            py-2
-                        "
-                        placeholder="MM/YY"
-                    />
-                    {errors.paymentDetails?.expiryDate && (
-                        <p className="text-red-500 text-sm">{errors.paymentDetails.expiryDate.message}</p>
-                    )}
-                </div>
-
-                <div>
-                    <label
-                        htmlFor="cvv"
-                        className="block text-base font-normal text-gray-700 mb-3"
-                    >
-                        CVV
-                    </label>
-                    <InputMask
-                        mask="___"
-                        replacement={{ _: /\d/ }}
-                        {...register("paymentDetails.cvv")}
-                        type="text"
-                        name="paymentDetails.cvv"
-                        id="cvv"
-                        className="
-                            w-full 
-                            rounded-lg
-                            border-0
-                            border-b
-                            border-gray-300
-                            bg-transparent
-                            focus:border-cyan-700
-                            focus:ring-0
-                            placeholder-gray-400
-                            text-sm
-                            py-2
-                        "
-                        placeholder="123"
-                    />
-                    {errors.paymentDetails?.cvv && (
-                        <p className="text-red-500 text-sm">{errors.paymentDetails.cvv.message}</p>
-                    )}
-                </div>
+                {errorMessage && (
+                    <div className="text-red-500 text-sm">{errorMessage}</div>
+                )}
 
                 <div className="flex justify-between mt-6">
                     <button
@@ -129,11 +100,13 @@ export default function CheckoutForm({
                             py-3 
                             px-6 
                         "
+                        disabled={isProcessing}
                     >
                         Back
                     </button>
                     <button
                         type="submit"
+                        disabled={!stripe || isProcessing}
                         className="
                             bg-cyan-700 
                             text-white
@@ -145,7 +118,7 @@ export default function CheckoutForm({
                             px-3 
                         "
                     >
-                        Submit Order
+                        {isProcessing ? "Processing..." : "Submit Order"}
                     </button>
                 </div>
             </form>

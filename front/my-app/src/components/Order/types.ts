@@ -1,11 +1,10 @@
 import { CheckoutFormInputs } from "@/validations/checkoutFormSchema";
 import { OrderFormInputs } from "@/validations/orderFormSchema";
+import { PaymentMethod } from "@stripe/stripe-js";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
-export interface PaymentDetailsProps {
-    cardNumber: string;
-    expiryDate: string;
-    cvv: string;
+export interface PaymentMethodData {
+    paymentMethodId: string;
 }
 
 export interface OrderDetailsProps {
@@ -14,7 +13,7 @@ export interface OrderDetailsProps {
     address: string;
     email: string;
     pickupPoint: number | null;
-    paymentDetails: PaymentDetailsProps;
+    paymentMethoId: string;
 }
 
 export interface OrderFormProps {
@@ -26,9 +25,6 @@ export interface OrderFormProps {
 }
 
 export interface CheckoutFormProps {
-    register: UseFormRegister<CheckoutFormInputs>;
-    errors: FieldErrors<CheckoutFormInputs>;
-    setValue: UseFormSetValue<CheckoutFormInputs>;
     onBackToForm: () => void;
-    onSubmitOrder: () => void;
+    onSubmitOrder: (data: PaymentMethodData) => void;
 }

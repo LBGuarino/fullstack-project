@@ -9,10 +9,16 @@ import { checkoutFormSchema } from "@/validations/checkoutFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OrderFormInputs } from "@/validations/orderFormSchema";
 import { CheckoutFormInputs } from "@/validations/checkoutFormSchema";
+import axios from "axios";
+import { useStripe } from "@stripe/react-stripe-js";
+import { PaymentMethodData } from "./types";
 
 export default function Order() {
     const [isCheckout, setIsCheckout] = useState(false);
     const [orderData, setOrderData] = useState<OrderFormInputs | null>(null);
+    const [paymentError, setPaymentError] = useState<string | null>(null);
+    const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null);
+    const stripe = useStripe();
 
     const {
         register: registerOrderForm,
@@ -38,33 +44,40 @@ export default function Order() {
         shouldUnregister: true,
     });
 
-    const {
-        register: registerCheckoutForm,
-        handleSubmit: handleSubmitCheckoutForm,
-        setValue: setValueCheckoutForm,
-        watch: watchCheckoutForm,
-        formState: { errors: errorsCheckoutForm },
-        reset: resetCheckoutForm, 
-    } = useForm<CheckoutFormInputs>({
-        resolver: zodResolver(checkoutFormSchema),
-        defaultValues: {
-            paymentDetails: {
-                cardNumber: "",
-                expiryDate: "",
-                cvv: "",
-            },
-        },
-        shouldUnregister: true,
-    });
+    const handleSubmitOrder = async (checkoutData: PaymentMethodData) => {
+        if (orderData && stripe) {
+            const amount = 1000; // Define tu lógica para calcular el monto
 
-    const handleSubmitOrder = (checkoutData: CheckoutFormInputs) => {
-        if (orderData) {
-            const completeOrder = { ...orderData, ...checkoutData };
-            console.log(`Order submitted: ${JSON.stringify(completeOrder)}`);
-            // Aquí puedes enviar completeOrder al backend
+            try {
+                // Crea el PaymentIntent en el backend
+                const response = await axios.post('/create-payment-intent', {
+                    paymentMethodId: checkoutData.paymentMethodId,
+                    amount: amount,
+                });
+
+                const paymentIntent = response.data;
+
+                if (paymentIntent.status === 'requires_action' && paymentIntent.next_action.type === 'use_stripe_sdk') {
+                    // Maneja la autenticación adicional (p.ej., 3D Secure)
+                    const { error: stripeError, paymentIntent: updatedPaymentIntent } = await stripe.confirmCardPayment(paymentIntent.client_secret);
+
+                    if (stripeError) {
+                        setPaymentError(stripeError.message?? 'An error occurred');
+                    } else if (updatedPaymentIntent.status === 'succeeded') {
+                        setPaymentSuccess('Pago realizado con éxito');
+                        // Aquí puedes almacenar la orden en tu base de datos
+                        // y redirigir al usuario a una página de éxito
+                    }
+                } else if (paymentIntent.status === 'succeeded') {
+                    setPaymentSuccess('Pago realizado con éxito');
+                    // Aquí puedes almacenar la orden en tu base de datos
+                    // y redirigir al usuario a una página de éxito
+                }
+            } catch (error: any) {
+                setPaymentError(error.response?.data?.error?.message || 'An unexpected error occurred');
+            }
         }
     };
-
     const handleContinueToPayment = (data: OrderFormInputs) => {
         setOrderData(data); 
         setIsCheckout(true); 
@@ -90,12 +103,21 @@ export default function Order() {
 
             {isCheckout && (
                 <CheckoutForm
-                    register={registerCheckoutForm}
-                    errors={errorsCheckoutForm}
-                    setValue={setValueCheckoutForm}       
                     onBackToForm={() => setIsCheckout(false)}
-                    onSubmitOrder={handleSubmitCheckoutForm(handleSubmitOrder)}
+                    onSubmitOrder={handleSubmitOrder}
                 />
+            )}
+            
+            {paymentError && (
+                <div className="fixed top-4 right-4 bg-red-500 text-white p-4 rounded">
+                    {paymentError}
+                </div>
+            )}
+
+            {paymentSuccess && (
+                <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded">
+                    {paymentSuccess}
+                </div>
             )}
         </div>    
     );
