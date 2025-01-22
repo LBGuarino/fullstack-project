@@ -1,6 +1,6 @@
 'use client'
 import { useAuth } from "@/context/usersContext";
-import { LoginFormInputs, loginSchema } from "@/helpers/validations";
+import { LoginFormInputs, loginSchema } from "@/validations/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import Link from "next/link";

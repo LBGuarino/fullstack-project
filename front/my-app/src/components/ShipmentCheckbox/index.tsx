@@ -1,4 +1,4 @@
-import { OrderFormInputs, orderFormSchema } from "@/helpers/validations";
+import { OrderFormInputs, orderFormSchema } from "@/validations/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 

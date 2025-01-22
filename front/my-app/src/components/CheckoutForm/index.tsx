@@ -1,12 +1,12 @@
+import { InputMask } from "@react-input/mask";
 import { CheckoutFormProps } from "../Order/types";
 
 export default function CheckoutForm({
     register,
     errors,
-    setValue,
     onBackToForm,
     onSubmitOrder,
-} : CheckoutFormProps) {
+}: CheckoutFormProps) {
 
     return (
         <div className="p-4 h-full w-full overflow-y-auto max-h-screen">
@@ -20,28 +20,30 @@ export default function CheckoutForm({
                     >
                         Card Number
                     </label>
-                    <input
+                    <InputMask
+                        mask="____ ____ ____ ____"
+                        replacement={{ _: /\d/ }}
                         {...register("paymentDetails.cardNumber")}
                         type="text"
-                        name="cardNumber"
+                        name="paymentDetails.cardNumber"
                         id="card-number"
                         className="
-                            w-full 
-                            rounded-lg
-                            border-0
-                            border-b
-                            border-gray-300
-                            bg-transparent
-                            focus:border-cyan-700
-                            focus:ring-0
-                            placeholder-gray-400
-                            text-sm
-                            py-2
-                        "
+                        w-full 
+                        rounded-lg
+                        border-0
+                        border-b
+                        border-gray-300
+                        bg-transparent
+                        focus:border-cyan-700
+                        focus:ring-0
+                        placeholder-gray-400
+                        text-sm
+                        py-2
+                    "
                         placeholder="1234 5678 9012 3456"
                     />
                     {errors.paymentDetails?.cardNumber && (
-                    <p className="text-red-500 text-sm">{errors.paymentDetails.cardNumber.message}</p>
+                        <p className="text-red-500 text-sm">{errors.paymentDetails.cardNumber.message}</p>
                     )}
                 </div>
 
@@ -52,10 +54,12 @@ export default function CheckoutForm({
                     >
                         Expiry Date
                     </label>
-                    <input
+                    <InputMask
+                        mask="__/__"
+                        replacement={{ _: /\d/ }}
                         {...register("paymentDetails.expiryDate")}
                         type="text"
-                        name="expiryDate"
+                        name="paymentDetails.expiryDate"
                         id="expiry"
                         className="
                             w-full 
@@ -73,7 +77,7 @@ export default function CheckoutForm({
                         placeholder="MM/YY"
                     />
                     {errors.paymentDetails?.expiryDate && (
-                    <p className="text-red-500 text-sm">{errors.paymentDetails.expiryDate.message}</p>
+                        <p className="text-red-500 text-sm">{errors.paymentDetails.expiryDate.message}</p>
                     )}
                 </div>
 
@@ -84,10 +88,12 @@ export default function CheckoutForm({
                     >
                         CVV
                     </label>
-                    <input
+                    <InputMask
+                        mask="___"
+                        replacement={{ _: /\d/ }}
                         {...register("paymentDetails.cvv")}
                         type="text"
-                        name="cvv"
+                        name="paymentDetails.cvv"
                         id="cvv"
                         className="
                             w-full 
@@ -105,7 +111,7 @@ export default function CheckoutForm({
                         placeholder="123"
                     />
                     {errors.paymentDetails?.cvv && (
-                    <p className="text-red-500 text-sm">{errors.paymentDetails.cvv.message}</p>
+                        <p className="text-red-500 text-sm">{errors.paymentDetails.cvv.message}</p>
                     )}
                 </div>
 

@@ -3,7 +3,7 @@
 import { useState, useContext, ReactNode, useEffect, createContext } from "react";
 import axios from "axios";
 
-interface ProductDetails {
+export interface ProductDetails {
     id: number;
     name: string;
     price: number;
@@ -11,7 +11,7 @@ interface ProductDetails {
     description: string;
 }
 
-interface CartItem {
+export interface CartItem {
     product: ProductDetails;
     quantity: number;
 }

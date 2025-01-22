@@ -1,5 +1,6 @@
-import { OrderFormInputs } from "@/helpers/validations";
-import { FieldErrors, UseFormRegister, UseFormSetError, UseFormSetValue } from "react-hook-form";
+import { CheckoutFormInputs } from "@/validations/checkoutFormSchema";
+import { OrderFormInputs } from "@/validations/orderFormSchema";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 export interface PaymentDetailsProps {
     cardNumber: string;
@@ -25,9 +26,9 @@ export interface OrderFormProps {
 }
 
 export interface CheckoutFormProps {
-    register: UseFormRegister<OrderFormInputs>;
-    errors: FieldErrors<OrderFormInputs>;
-    setValue: UseFormSetValue<OrderFormInputs>;
+    register: UseFormRegister<CheckoutFormInputs>;
+    errors: FieldErrors<CheckoutFormInputs>;
+    setValue: UseFormSetValue<CheckoutFormInputs>;
     onBackToForm: () => void;
     onSubmitOrder: () => void;
 }

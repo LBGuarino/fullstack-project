@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
-import { SignupFormInputs, signupSchema } from '@/helpers/validations';
+import { SignupFormInputs, signupSchema } from '@/validations/validations';
 import registerUser from '@/helpers/registerUser';
 
 export default function SignupForm() {

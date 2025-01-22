@@ -3,9 +3,6 @@ import { ShipmentCheckbox } from "../ShipmentCheckbox";
 import AddressAutocomplete from "../GoogleAddress";
 import { OrderFormProps } from "../Order/types";
 import { pickupPoints } from "./config";
-import { useForm } from "react-hook-form";
-import { OrderFormInputs, orderFormSchema } from "@/helpers/validations";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function OrderForm({
     register,
@@ -17,13 +14,24 @@ export default function OrderForm({
 
     const handleShipmentChange = (option: "delivery" | "pickup") => {
         if (option === "pickup") {
-            setValue('pickupPoint', pickupPoints[0].id);
-            setValue('address', undefined);
+          setValue("pickupPoint", pickupPoints[0].id);
+          setValue("address", {
+            street: "",
+            city: "",
+            postalCode: "",
+            country: "",
+          });
         } else {
-            setValue('pickupPoint', null);
+          setValue("pickupPoint", null);
+          setValue("address", {
+            street: "",
+            city: "",
+            postalCode: "",
+            country: "",
+          });
         }
-    }
-
+      };
+    
     return (
     <div className="p-4 h-full w-full overflow-y-auto max-h-screen">
         <form className="flex flex-col gap-6 p-4" onSubmit={onContinueToCheckout}>
@@ -162,8 +170,7 @@ export default function OrderForm({
 
             <div className="flex justify-end mt-6">
                 <button
-                    type="button"
-                    onClick={onContinueToCheckout}
+                    type="submit"
                     className="
                         bg-transparent 
                         text-cyan-700

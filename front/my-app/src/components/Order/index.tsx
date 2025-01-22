@@ -1,20 +1,26 @@
+// components/Order.js
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import OrderForm from "../OrderForm";
 import CheckoutForm from "../CheckoutForm";
 import { useForm } from "react-hook-form";
-import { OrderFormInputs, orderFormSchema } from "@/helpers/validations";
+import { orderFormSchema } from "@/validations/orderFormSchema";
+import { checkoutFormSchema } from "@/validations/checkoutFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { OrderFormInputs } from "@/validations/orderFormSchema";
+import { CheckoutFormInputs } from "@/validations/checkoutFormSchema";
 
 export default function Order() {
     const [isCheckout, setIsCheckout] = useState(false);
+    const [orderData, setOrderData] = useState<OrderFormInputs | null>(null);
+
     const {
-        register,
-        handleSubmit,
-        setValue,
-        watch,
-        formState: { errors },
+        register: registerOrderForm,
+        handleSubmit: handleSubmitOrderForm,
+        setValue: setValueOrderForm,
+        watch: watchOrderForm,
+        formState: { errors: errorsOrderForm },
+        reset: resetOrderForm,
     } = useForm<OrderFormInputs>({
         resolver: zodResolver(orderFormSchema),
         defaultValues: {
@@ -28,53 +34,69 @@ export default function Order() {
             },
             email: "",
             pickupPoint: null,
+        },
+        shouldUnregister: true,
+    });
+
+    const {
+        register: registerCheckoutForm,
+        handleSubmit: handleSubmitCheckoutForm,
+        setValue: setValueCheckoutForm,
+        watch: watchCheckoutForm,
+        formState: { errors: errorsCheckoutForm },
+        reset: resetCheckoutForm, 
+    } = useForm<CheckoutFormInputs>({
+        resolver: zodResolver(checkoutFormSchema),
+        defaultValues: {
             paymentDetails: {
                 cardNumber: "",
                 expiryDate: "",
                 cvv: "",
+            },
         },
-    },
-});
-    
-    const watchPickupPoint = watch("pickupPoint") ?? null;
+        shouldUnregister: true,
+    });
 
-    const handleSubmitOrder = (data: OrderFormInputs) => {
-        console.log(`order submitted: ${JSON.stringify(data)}`);
+    const handleSubmitOrder = (checkoutData: CheckoutFormInputs) => {
+        if (orderData) {
+            const completeOrder = { ...orderData, ...checkoutData };
+            console.log(`Order submitted: ${JSON.stringify(completeOrder)}`);
+            // Aquí puedes enviar completeOrder al backend
+        }
     };
 
-    const handleContinueToPayment = handleSubmit(() => {
-        setIsCheckout(true);
-    })
+    const handleContinueToPayment = (data: OrderFormInputs) => {
+        setOrderData(data); 
+        setIsCheckout(true); 
+    };
+
+    useEffect(() => {
+        if (!isCheckout && orderData) {
+            resetOrderForm(orderData);
+        }
+    }, [isCheckout, orderData, resetOrderForm]);
 
     return (
         <div className="relative overflow-hidden h-full w-full">
-            <div
-                className={`absolute inset-0 w-full h-full transform transition-transform duration-500 ${
-                    isCheckout ? "-translate-x-full" : "translate-x-0"
-                }`}
-            >
+            {!isCheckout && (
                 <OrderForm
-                    register={register}
-                    errors={errors}
-                    watchPickupPoint={watchPickupPoint}
-                    setValue={setValue}
-                    onContinueToCheckout={handleContinueToPayment}
+                    register={registerOrderForm}
+                    errors={errorsOrderForm}
+                    watchPickupPoint={watchOrderForm("pickupPoint") ?? null}
+                    setValue={setValueOrderForm}
+                    onContinueToCheckout={handleSubmitOrderForm(handleContinueToPayment)}
                 />
-            </div>
+            )}
 
-            <div
-                className={`absolute inset-0 w-full h-full transform transition-transform duration-500 ${
-                    isCheckout ? "translate-x-0" : "translate-x-full"
-                }`}
-            >
+            {isCheckout && (
                 <CheckoutForm
-                    register={register}
-                    errors={errors}
-                    setValue={setValue}       
+                    register={registerCheckoutForm}
+                    errors={errorsCheckoutForm}
+                    setValue={setValueCheckoutForm}       
                     onBackToForm={() => setIsCheckout(false)}
-                    onSubmitOrder={handleSubmit(handleSubmitOrder)}
+                    onSubmitOrder={handleSubmitCheckoutForm(handleSubmitOrder)}
                 />
-            </div>
-        </div>
+            )}
+        </div>    
     );
 }
