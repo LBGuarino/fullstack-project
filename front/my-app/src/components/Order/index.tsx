@@ -12,8 +12,21 @@ import { CheckoutFormInputs } from "@/validations/checkoutFormSchema";
 import axios from "axios";
 import { useStripe } from "@stripe/react-stripe-js";
 import { PaymentMethodData } from "./types";
+import { CartItem } from "@/context/CartContext";
 
-export default function Order() {
+export interface CartProduct {
+    productId: number;
+    quantity: number;
+    price: number;
+}
+
+export default function Order({
+    products,
+    totalAmount,
+}: {
+    products: CartItem[];
+    totalAmount: number;
+}) {
     const [isCheckout, setIsCheckout] = useState(false);
     const [orderData, setOrderData] = useState<OrderFormInputs | null>(null);
     const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -46,11 +59,11 @@ export default function Order() {
 
     const handleSubmitOrder = async (checkoutData: PaymentMethodData) => {
         if (orderData && stripe) {
-            const amount = 1000; // Define tu lógica para calcular el monto
+            const amount = totalAmount * 100;
 
             try {
                 // Crea el PaymentIntent en el backend
-                const response = await axios.post('/create-payment-intent', {
+                const response = await axios.post('http://localhost:3001/payment/create-payment-intent', {
                     paymentMethodId: checkoutData.paymentMethodId,
                     amount: amount,
                 });

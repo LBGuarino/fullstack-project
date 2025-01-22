@@ -15,6 +15,8 @@ export default function ShoppingBag() {
       useEffect(() => {
         fetchCart();
       }, []);
+
+    const totalAmount = productsInCart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
     
     return (
         
@@ -22,7 +24,10 @@ export default function ShoppingBag() {
         <Elements stripe={stripePromise}>
         <GoogleMapsProvider>
             <div className="flex-1 bg-gray-100 flex items-center justify-center p-4">
-                <Order />
+                <Order
+                    products={productsInCart}
+                    totalAmount={totalAmount}
+                />
             </div>
         </GoogleMapsProvider>
         </Elements>
