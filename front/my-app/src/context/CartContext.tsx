@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useContext, ReactNode, useEffect, createContext } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import Link from "next/link";
 
 export interface ProductDetails {
     id: number;
@@ -47,9 +48,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 quantity: item.quantity,
             }));
             setProductsInCart(items);
-        } catch (err) {
-            setError("Error fetching cart");
-            console.error(err);
+        } catch (error) {
+            const err = error as AxiosError;
+            if (err.response?.status === 400) {
+                setProductsInCart([]);
+            } else {
+            setError(err.message || "Unexpected error");
+            console.error(err)}
         } finally {
             setLoading(false);
         }
@@ -62,6 +67,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const addToCart = async (product: CartItem) => {
         setLoading(true);
         setError(null);
+        try {
+            const permission = await axios.get("http://localhost:3001/users/cart", {
+                withCredentials: true,
+            });
+        } catch (error) {
+            const err = error as AxiosError;
+            if (err) {
+                window.location.href = "/login";
+            }
+        }
         try {
             await axios.post(
                 "http://localhost:3001/users/cart",
