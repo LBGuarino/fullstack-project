@@ -19,7 +19,6 @@ export const getProductById = catchedController(
 export const getCategories = catchedController(
   async (req: Request, res: Response) => {
     const categories = await getCategoriesService(req);
-    console.log(categories)
     res.json(categories);
   }
 );

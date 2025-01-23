@@ -21,6 +21,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
                 enabled: true,
                 allow_redirects: "never",
             },
+            confirm: true,
         });
 
         res.status(200).json(paymentIntent);

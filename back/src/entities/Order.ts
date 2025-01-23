@@ -5,10 +5,12 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
 import { Product } from "./Product";
+import { OrderData } from "./OrderData";
 
 // status: pending, approved, rejected
 
@@ -30,4 +32,10 @@ export class Order {
   @ManyToMany(() => Product)
   @JoinTable()
   products: Product[];
+
+  @Column({ nullable: false })
+  paymentMethodId: string;
+
+  @OneToOne(() => OrderData, (orderData) => orderData.order, { cascade: true })
+  orderData: OrderData;
 }

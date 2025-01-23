@@ -1,3 +1,5 @@
+import AuthProvider from "@/context/usersContext";
+
 export default function ShoppingBagLayout({ children }: { children: React.ReactNode }) {
     return (
         <>

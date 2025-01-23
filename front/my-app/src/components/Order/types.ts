@@ -26,5 +26,5 @@ export interface OrderFormProps {
 
 export interface CheckoutFormProps {
     onBackToForm: () => void;
-    onSubmitOrder: (data: PaymentMethodData) => void;
+    onSubmitOrder: (data: PaymentMethodData) => Promise<void>;
 }
