@@ -1,9 +1,14 @@
-import { IProduct } from "./IProduct";
+import { ProductDetails } from "@/context/CartContext";
 
 export interface IOrder {
   id: number;
   status: string;
   date: Date;
   userId: number;
-  products: IProduct[];
+  orderProducts: OrderProduct[];
+}
+
+export interface OrderProduct {
+  product: ProductDetails;
+  quantity: number;
 }

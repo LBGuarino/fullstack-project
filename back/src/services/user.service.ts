@@ -118,3 +118,16 @@ export const removeFromCartService = async ({ productId, userId }: { productId: 
   await CartItemRepository.remove(cartItem);
   return userCart;
 };
+
+export const removeAllFromCartService = async ({ userId }: { userId: number }): Promise<Cart> => {
+  const userCart = await CartRepository.findOne({
+    where: { user: { id: userId } },
+    relations: ["items", "items.product"],
+  });
+  if (!userCart) {
+    throw new ClientError("Cart not found");
+  }
+
+  await CartItemRepository.remove(userCart.items);
+  return userCart;
+};

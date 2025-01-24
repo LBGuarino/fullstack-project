@@ -5,6 +5,7 @@ import {
   getCartService,
   loginUserService,
   registerUserService,
+  removeAllFromCartService,
   removeFromCartService,
 } from "../services/user.service";
 import jwt from "jsonwebtoken";
@@ -108,5 +109,14 @@ export const removeFromCart = catchedController(async (req: Request, res: Respon
     throw new ClientError("Invalid product ID", 400);
   }
   const cart = await removeFromCartService({ productId, userId });
+  res.status(200).send(cart);
+});
+
+export const removeAllFromCart = catchedController(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    throw new ClientError("User not authenticated", 401);
+  }
+  const cart = await removeAllFromCartService({ userId });
   res.status(200).send(cart);
 });

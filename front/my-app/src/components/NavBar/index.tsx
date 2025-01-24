@@ -4,14 +4,27 @@ import styles from './index.module.css';
 import NavConfig, { NavItem } from '@/config/navConfig';
 import DropdownMenu, { DropdownMenuProps } from '../DropdownMenu';
 import { useAuth } from '@/context/usersContext';
+import { Badge, BadgeProps, styled } from '@mui/material';
+import { useCartContext } from '@/context/CartContext';
 
 interface NavBarProps {
   dropdownProps: DropdownMenuProps;
 }
 
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: 1,
+    top: 14,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px'
+  },
+}));
+
 export default function NavBar({ dropdownProps }: NavBarProps) {
   const { user, logout } = useAuth();
   const isLoggedIn = user?.id;
+  const { productsInCart } = useCartContext();
+  const totalItems = productsInCart.reduce((acc, item) => acc + item.quantity, 0);
 
   const handleLogout = () => {
     logout();
@@ -66,11 +79,13 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
             key="shopping-bag-icon"
           >
             <Link href="/shopping-bag">
+              <StyledBadge badgeContent={totalItems} color="primary">
               <img 
                 src="/shopbag.svg" 
                 className="w-5 h-5 hover:transform hover:scale-125 transition-all duration-200 ease-in-out"
                 alt="shopping bag"
               />
+              </StyledBadge>
             </Link>
           </li>
           <button onClick={handleLogout}>Logout</button>

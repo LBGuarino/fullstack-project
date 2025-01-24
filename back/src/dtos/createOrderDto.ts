@@ -11,9 +11,14 @@ interface OrderData {
   pickupPoint: number | undefined;
 }
 
+interface ProductWQuantity {
+  productId: number;
+  quantity: number;
+}
+
 export interface CreateOrderDto {
   userId: number;
-  products: number[];
+  products: ProductWQuantity[];
   paymentMethodId: string;
   orderData: OrderData;
 }

@@ -10,12 +10,12 @@ import axios from "axios";
 import { useStripe } from "@stripe/react-stripe-js";
 import { OrderFormInputs, orderFormSchema } from "@/validations/orderFormSchema";
 import { PaymentMethodData } from "./types";
-import { CartItem } from "@/context/CartContext";
+import { CartItem, useCartContext } from "@/context/CartContext";
 import { useAuth } from "@/context/usersContext";
-
+import { useRouter } from "next/navigation";
 export interface OrderProps {
-    products: CartItem[]; // Lista de productos en el carrito
-    totalAmount: number;  // Monto total del carrito en centavos
+    products: CartItem[]; 
+    totalAmount: number; 
 }
 
 const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
@@ -24,7 +24,9 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
     const [paymentError, setPaymentError] = useState<string | null>(null);
     const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null);
     const { user } = useAuth();
+    const { clearCart } = useCartContext();
     const stripe = useStripe();
+    const router = useRouter();
 
     const {
         register,
@@ -50,35 +52,33 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
         shouldUnregister: true,
     });
 
-    const productsIds: number[] = products.map((product) => product.product.id);
+    const productsWQuantity = products.map((cartItem) => ({ productId: cartItem.product.id, quantity: cartItem.quantity }));
 
     const handleSubmitOrder = async ({ paymentMethodId }: PaymentMethodData): Promise<void> => {
         if (!orderData || !stripe) return;
 
         try {
-            // Crear PaymentIntent en el backend
             const response = await axios.post<{ client_secret: string; status: string; next_action?: any }>(
                 "http://localhost:3001/payment/create-payment-intent",
                 {
                     paymentMethodId,
-                    amount: totalAmount * 100, // Stripe requiere el monto en centavos
+                    amount: totalAmount * 100,
                 }
             );
 
             const { client_secret, status, next_action } = response.data;
-            console.log("PaymentIntent created:", response.data);
 
             if (status === "requires_action" && next_action?.type === "use_stripe_sdk") {
             } else if (status === "requires_confirmation" || status === "succeeded") {
-                setPaymentSuccess("Payment succeeded.");
                 await axios.post("http://localhost:3001/orders", {
                     userId: user?.id,
                     paymentMethodId,
-                    products: productsIds,
+                    products: productsWQuantity,
                     orderData,
                 }, {
                     withCredentials: true,
                 });
+                setPaymentSuccess("Payment succeeded.");
             } else {
                 setPaymentError("An error occurred during payment confirmation2.");
             }
@@ -92,6 +92,13 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
         setOrderData(data);
         setIsCheckout(true);
     };
+
+    useEffect(() => {
+        if (paymentSuccess) {
+            clearCart();
+            router.push("/confirmation_page");
+        }
+    }, [paymentSuccess]);
 
     useEffect(() => {
         if (!isCheckout && orderData) {
@@ -119,13 +126,13 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
             )}
 
             {paymentError && (
-                <div className="fixed top-4 right-4 bg-red-500 text-white p-4 rounded">
+                <div className="fixed top-4 right-4 bg-red-500 text-white p-4 rounded z-50">
                     {paymentError}
                 </div>
             )}
 
             {paymentSuccess && (
-                <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded">
+                <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded z-50">
                     {paymentSuccess}
                 </div>
             )}

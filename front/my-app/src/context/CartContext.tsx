@@ -2,7 +2,7 @@
 
 import { useState, useContext, ReactNode, useEffect, createContext } from "react";
 import axios, { AxiosError } from "axios";
-import Link from "next/link";
+import { IOrder } from "@/interfaces/IOrder";
 
 export interface ProductDetails {
     id: number;
@@ -16,6 +16,7 @@ export interface CartItem {
     product: ProductDetails;
     quantity: number;
 }
+
 
 export interface CartContextValue {
     productsInCart: CartItem[];
@@ -130,10 +131,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         setError(null);
         try {
+            setProductsInCart([]);
             await axios.delete("http://localhost:3001/users/cart", {
                 withCredentials: true,
             });
-            setProductsInCart([]);
         } catch (err) {
             setError("Error clearing cart");
             console.error(err);
