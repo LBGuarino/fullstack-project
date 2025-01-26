@@ -1,11 +1,16 @@
 'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { Badge, BadgeProps, styled } from '@mui/material';
 import styles from './index.module.css';
 import NavConfig, { NavItem } from '@/config/navConfig';
 import DropdownMenu, { DropdownMenuProps } from '../DropdownMenu';
 import { useAuth } from '@/context/usersContext';
-import { Badge, BadgeProps, styled } from '@mui/material';
 import { useCartContext } from '@/context/CartContext';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import MobileDropdown from '../MobileDropdown';
+import AccountMenu from '../AccountMenu';
 
 interface NavBarProps {
   dropdownProps: DropdownMenuProps;
@@ -21,31 +26,33 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 }));
 
 export default function NavBar({ dropdownProps }: NavBarProps) {
-  const { user, logout } = useAuth();
-  const isLoggedIn = user?.id;
+  const { user } = useAuth();
+  const isLoggedIn = !!user?.id;
   const { productsInCart } = useCartContext();
   const totalItems = productsInCart.reduce((acc, item) => acc + item.quantity, 0);
 
-  const handleLogout = () => {
-    logout();
-  }
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleToggleMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   return (
-    <nav className={styles.header}>
+    <nav className={`${styles.header} relative`}>
       <div className="flex items-center">
         <Link href="/">
-            <img
+          <img
             src="/hi-tec.png"
             alt="logo"
-            className="w-28 h-28"
-            />
+            className="w-16 h-16 md:w-20 md:h-20"
+          />
         </Link>
       </div>
 
-      <ul className="flex flex-row items-center justify-center gap-5 mr-10">
-        <DropdownMenu 
-          categories={dropdownProps.categories} 
-          popularProducts={dropdownProps.popularProducts} 
+      <ul className="hidden md:flex flex-row items-center justify-center gap-5 mr-10">
+        <DropdownMenu
+          categories={dropdownProps.categories}
+          popularProducts={dropdownProps.popularProducts}
         />
 
         {NavConfig.map((el: NavItem) => (
@@ -57,41 +64,93 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
           </li>
         ))}
       </ul>
-      
+
       <ul className="flex flex-row items-center justify-end gap-4">
-      {!isLoggedIn ? (
-          <li 
-            className="flex flex-row gap-2" 
-            key="login-icon"
-          >
+        {!isLoggedIn ? (
+          <li className="flex flex-row gap-2" key="login-icon">
             <Link href="/login">
-              <img 
-                src="/user.svg" 
-                className="w-5 h-5 hover:transform hover:scale-125 transition-all duration-200 ease-in-out"
+              <img
+                src="/user.svg"
+                className="
+                  w-5 h-5 
+                  hover:transform 
+                  hover:scale-125 
+                  transition-all 
+                  duration-200 
+                  ease-in-out
+                "
                 alt="login"
               />
             </Link>
           </li>
         ) : (
-          <>
-          <li 
-            className="flex flex-row gap-2" 
-            key="shopping-bag-icon"
-          >
-            <Link href="/shopping-bag">
-              <StyledBadge badgeContent={totalItems} color="primary">
-              <img 
-                src="/shopbag.svg" 
-                className="w-5 h-5 hover:transform hover:scale-125 transition-all duration-200 ease-in-out"
-                alt="shopping bag"
-              />
-              </StyledBadge>
-            </Link>
-          </li>
-          <button onClick={handleLogout}>Logout</button>
-          </>
+          <div className="flex flex-row gap-4 items-center">
+            <li key="shopping-bag-icon">
+              <Link href="/shopping-bag">
+                <StyledBadge badgeContent={totalItems} color="primary">
+                  <img
+                    src="/shopbag.svg"
+                    className="
+                      w-5 h-5
+                      hover:transform
+                      hover:scale-125
+                      transition-all
+                      duration-200
+                      ease-in-out
+                    "
+                    alt="shopping bag"
+                  />
+                </StyledBadge>
+              </Link>
+            </li>
+            <AccountMenu />
+          </div>
         )}
+
+        <button 
+          onClick={handleToggleMenu} 
+          className="md:hidden p-2 text-gray-700 hover:bg-gray-200 rounded-md focus:outline-none transition"
+        >
+          {mobileMenuOpen ? (
+            <XIcon className="w-6 h-6" />
+          ) : (
+            <MenuIcon className="w-6 h-6" />
+          )}
+        </button>
       </ul>
+
+      {mobileMenuOpen && (
+        <div 
+          className="
+            absolute top-20 right-0 
+            w-full 
+            bg-white 
+            border-t 
+            border-gray-300 
+            shadow-md
+            md:hidden
+            animate-fadeIn
+            z-50
+          "
+        >
+          <div className="flex flex-col px-4 py-4 gap-4">
+            <MobileDropdown 
+              categories={dropdownProps.categories}
+              popularProducts={dropdownProps.popularProducts}
+            />
+
+            {NavConfig.map((el: NavItem) => (
+              <Link 
+                key={`${el.text}-${el.path}`}
+                href={el.path}
+                className="text-sm text-gray-700 py-2 px-2 border-b hover:bg-gray-100"
+              >
+                {el.text}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

@@ -70,6 +70,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
 
             if (status === "requires_action" && next_action?.type === "use_stripe_sdk") {
             } else if (status === "requires_confirmation" || status === "succeeded") {
+                console.log(productsWQuantity);
                 await axios.post("http://localhost:3001/orders", {
                     userId: user?.id,
                     paymentMethodId,

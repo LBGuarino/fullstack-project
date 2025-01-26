@@ -23,8 +23,8 @@ const validateItemsExist = async (
 ) => {
   const { products } = req.body;
 
-  for await (const itemId of products) {
-    const exists = await checkProductExists(itemId);
+  for await (const item of products) {
+    const exists = await checkProductExists(item.productId);
     if (!exists)
       return next(
         new ClientError("One or more items do not exist in the database")
