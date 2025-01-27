@@ -6,7 +6,7 @@ import OrderForm from "../OrderForm";
 import CheckoutForm from "../CheckoutForm";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useStripe } from "@stripe/react-stripe-js";
 import { OrderFormInputs, orderFormSchema } from "@/validations/orderFormSchema";
 import { PaymentMethodData } from "./types";
@@ -58,7 +58,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
         if (!orderData || !stripe) return;
 
         try {
-            const response = await axios.post<{ client_secret: string; status: string; next_action?: any }>(
+            const response = await axios.post<{ client_secret: string; status: string; next_action?: { type: string } }>(
                 "http://localhost:3001/payment/create-payment-intent",
                 {
                     paymentMethodId,
@@ -66,7 +66,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
                 }
             );
 
-            const { client_secret, status, next_action } = response.data;
+            const { status, next_action } = response.data;
 
             if (status === "requires_action" && next_action?.type === "use_stripe_sdk") {
             } else if (status === "requires_confirmation" || status === "succeeded") {
@@ -84,8 +84,9 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
                 setPaymentError("An error occurred during payment confirmation2.");
             }
                     
-        } catch (error: any) {
-            setPaymentError(error.response?.data?.error?.message || "An error occurred during payment confirmation3.");
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError;
+            setPaymentError(axiosError.message ?? "An error occurred during payment confirmation.");
         }
     };
 

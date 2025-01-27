@@ -1,6 +1,4 @@
-import { CheckoutFormInputs } from "@/validations/checkoutFormSchema";
 import { OrderFormInputs } from "@/validations/orderFormSchema";
-import { PaymentMethod } from "@stripe/stripe-js";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 export interface PaymentMethodData {

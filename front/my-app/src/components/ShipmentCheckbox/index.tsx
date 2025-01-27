@@ -1,4 +1,4 @@
-import { OrderFormInputs, orderFormSchema } from "@/validations/validations";
+import { OrderFormInputs, orderFormSchema } from "@/validations/orderFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -13,8 +13,6 @@ export const ShipmentCheckbox = ({ selectedOption, setSelectedOption }: Shipment
     };
 
     const {
-        register,
-        formState: { errors },
     } = useForm<OrderFormInputs>({
         resolver: zodResolver(orderFormSchema),
     });

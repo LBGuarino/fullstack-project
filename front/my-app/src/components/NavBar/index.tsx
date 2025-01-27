@@ -8,7 +8,7 @@ import NavConfig, { NavItem } from '@/config/navConfig';
 import DropdownMenu, { DropdownMenuProps } from '../DropdownMenu';
 import { useAuth } from '@/context/usersContext';
 import { useCartContext } from '@/context/CartContext';
-import { MenuIcon, XIcon, UserIcon, ShoppingBagIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon, ShoppingBagIcon } from '@heroicons/react/outline';
 import MobileDropdown from '../MobileDropdown';
 import AccountMenu from '../AccountMenu';
 

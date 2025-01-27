@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 
 export const registerUser = async (userData: IRegister) => {
     try {
-        const response = await axios.post('http://localhost:3001/users/register', userData);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, userData);
         return response.data;
     } catch (error) {
         const err = error as AxiosError;

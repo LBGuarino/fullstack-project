@@ -39,11 +39,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get("http://localhost:3001/users/cart", {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/cart`, {
                 withCredentials: true,
             });
 
-            const items = response.data.items.map((item: any) => ({
+            const items = response.data.items.map((item: CartItem) => ({
                 product: item.product,
                 quantity: item.quantity,
             }));
@@ -68,9 +68,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         setError(null);
         try {
-            const permission = await axios.get("http://localhost:3001/users/cart", {
+            const permission = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/cart`, {
                 withCredentials: true,
             });
+            if (permission.status === 401) {
+                window.location.href = "/login";
+            }
         } catch (error) {
             const err = error as AxiosError;
             if (err) {
@@ -79,7 +82,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
         try {
             await axios.post(
-                "http://localhost:3001/users/cart",
+                `${process.env.NEXT_PUBLIC_API_URL}/users/cart`,
                 { productId: product.product.id, quantity: product.quantity },
                 { withCredentials: true }
             );
@@ -96,7 +99,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         setError(null);
         try {
-            await axios.delete(`http://localhost:3001/users/cart/${productId}`, {
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/cart/${productId}`, {
                 withCredentials: true,
             });
             await fetchCart();
@@ -113,7 +116,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setError(null);
         try {
             await axios.patch(
-                `http://localhost:3001/users/cart/${product.product.id}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/users/cart/${product.product.id}`,
                 { quantity: product.quantity },
                 { withCredentials: true }
             );
@@ -131,7 +134,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setError(null);
         try {
             setProductsInCart([]);
-            await axios.delete("http://localhost:3001/users/cart", {
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/cart`, {
                 withCredentials: true,
             });
         } catch (err) {

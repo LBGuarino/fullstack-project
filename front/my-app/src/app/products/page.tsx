@@ -1,6 +1,5 @@
 'use client'
 import CategoryPagePC from "@/components/CategoryPagePC";
-import ProductCard from "@/components/ProductCard";
 import { getProducts } from "@/helpers/getProducts";
 import { IProduct } from "@/interfaces/IProduct";
 import { useEffect, useState } from "react";

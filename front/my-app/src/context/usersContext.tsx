@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthProviderProps, IAuthContextProps } from "./AuthContextProps";
 import { ILoggedUser } from "@/interfaces/ILoggedUser";
@@ -27,7 +27,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const checkSession = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3001/users/session", {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
         withCredentials: true,
       });
       const { user } = response.data;
@@ -53,7 +53,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       setLoading(true);
       setError(null);
 
-      const response = await axios.post("http://localhost:3001/users/login", userData,
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, userData,
         {withCredentials: true}
       );
 
@@ -70,7 +70,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
-    await axios.post("http://localhost:3001/users/logout", null, {
+    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, null, {
         withCredentials: true,
     });
     setUser(null);
@@ -80,7 +80,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get("http://localhost:3001/users/orders", {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/orders`, {
         withCredentials: true,
       });
       const orders = response.data; 

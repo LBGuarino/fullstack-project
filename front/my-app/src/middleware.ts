@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    const response = await fetch(`http://localhost:3001/users/session`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
       headers: {
         Cookie: req.headers.get("cookie") || "", // Pasa las cookies al backend
       },
@@ -23,6 +23,7 @@ export async function middleware(req: NextRequest) {
 
     return NextResponse.next(); // Token válido
   } catch (error) {
+    console.error("Error al validar token:", error);
     const loginUrl = new URL("/login", req.url);
     return NextResponse.redirect(loginUrl);
   }

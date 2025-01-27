@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/usersContext";
-import { Button, Divider, Drawer, IconButton } from "@mui/material";
+import { Divider, Drawer, IconButton } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import { dashboardConfig } from "./dashboardConfig";

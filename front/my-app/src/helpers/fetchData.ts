@@ -8,7 +8,7 @@ export interface CategoryPageProps {
 }
 
 export async function fetchDropdownData(): Promise<DropdownMenuProps> {
-  const res = await fetch("http://localhost:3001/products/categories");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/categories`);
   const data: ICategory[] = await res.json();
 
   const categories = data.map(({ name, id }) => ({
@@ -18,7 +18,7 @@ export async function fetchDropdownData(): Promise<DropdownMenuProps> {
 
   console.log(categories);
 
-  const response = await fetch("http://localhost:3001/products")
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
   const allProducts: IProduct[] = await response.json();
 
   const popularProducts = allProducts.map(({ 
@@ -46,7 +46,7 @@ export async function fetchProductsData({ params }: { params: { category: string
   const { category } = await params;
 
   try {
-    const response = await fetch(`http://localhost:3001/products/categories/${category}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/categories/${category}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch products for category: ${category}`);
     }

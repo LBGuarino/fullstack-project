@@ -3,7 +3,7 @@
 import { useElements, useStripe, CardElement } from "@stripe/react-stripe-js";
 import { useState } from "react";
 import { CheckoutFormProps } from "../Order/types";
-import { useAuth } from "@/context/usersContext";
+import { AxiosError } from "axios";
 
 const CheckoutForm: React.FC<CheckoutFormProps> = ({ onBackToForm, onSubmitOrder }) => {
     const stripe = useStripe();
@@ -42,8 +42,9 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onBackToForm, onSubmitOrder
 
         try {
             await onSubmitOrder({ paymentMethodId: paymentMethod!.id });
-        } catch (error) {
-            setErrorMessage("Error while processing payment.");
+        } catch (error: unknown) {
+            const axiosError = error as AxiosError;
+            setErrorMessage(axiosError.message ?? "Error while processing payment.");
         } finally {
             setIsProcessing(false);
         }
