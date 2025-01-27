@@ -37,6 +37,10 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <nav className={`${styles.header} relative`}>
       <div className="flex items-center">
@@ -135,6 +139,7 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
             <MobileDropdown 
               categories={dropdownProps.categories}
               popularProducts={dropdownProps.popularProducts}
+              closeMobileMenu={closeMobileMenu}
             />
 
             {NavConfig.map((el: NavItem) => (

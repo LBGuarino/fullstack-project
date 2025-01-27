@@ -26,7 +26,7 @@ export const getProductsByCategoryService = async (category: string): Promise<Pr
   return await ProductRepository.find({
     where: {
       category: {
-        name: category,
+        name: category.charAt(0).toUpperCase() + category.slice(1),
       },
     },
     relations: ['category'],

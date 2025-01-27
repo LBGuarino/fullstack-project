@@ -1,6 +1,6 @@
 import { ProductPageCard } from '@/components/ProductPageCard';
 import { IProduct } from '@/interfaces/IProduct';
-import { Breadcrumbs, Divider } from '@mui/material';
+import { Breadcrumbs } from '@mui/material';
 import Link from 'next/link';
 import { JSX } from 'react';
 
@@ -15,7 +15,7 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
   const product: IProduct = await response.json();
 
   return (
-    <div className="p-4 max-w-screen-xl mx-auto">
+    <div className="p-4 max-w-screen-xl mx-auto text-inherit">
       <Breadcrumbs aria-label="breadcrumb" className="mb-4 text-sm text-gray-500">
           <Link href="/" className="hover:underline hover:text-cyan-700">
             Home
@@ -27,8 +27,6 @@ export default async function ProductPage({ params }: ProductPageProps): Promise
             {category}
           </Link>
       </Breadcrumbs>
-
-      <Divider className="mb-6" />
 
       <div className="bg-white p-4 rounded-md shadow-sm mt-10">
         <ProductPageCard {...product} />

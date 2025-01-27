@@ -1,7 +1,5 @@
 'use client';
-
 import { ICategory } from "@/interfaces/ICategory";
-import { IProduct } from "@/interfaces/IProduct";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef } from "react";
@@ -65,7 +63,7 @@ const DropdownMenu = ({ categories, popularProducts }: DropdownMenuProps) => {
                 {categories.map(({ id, name }) => (
                   <li key={id}>
                     <Link
-                      href={`/categories/${name.toLowerCase()}`}
+                      href={`/products/${name.toLowerCase()}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 rounded-md px-2 py-1 transition-colors"
                     >
                       {name}
