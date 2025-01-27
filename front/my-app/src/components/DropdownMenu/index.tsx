@@ -6,9 +6,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef } from "react";
 
+export interface ProductWCategory {
+  name: string;
+  id: number;
+  image: string;
+  category: {
+    id: number;
+    name: string;
+  }
+}
+
 export interface DropdownMenuProps {
   categories: ICategory[];
-  popularProducts: IProduct[];
+  popularProducts: ProductWCategory[];
 }
 
 const DropdownMenu = ({ categories, popularProducts }: DropdownMenuProps) => {
@@ -27,6 +37,7 @@ const DropdownMenu = ({ categories, popularProducts }: DropdownMenuProps) => {
       setIsDropdownOpen(false);
     }, 200);
   };
+
 
   return (
     <div
@@ -54,7 +65,7 @@ const DropdownMenu = ({ categories, popularProducts }: DropdownMenuProps) => {
                 {categories.map(({ id, name }) => (
                   <li key={id}>
                     <Link
-                      href={`/categories/${id}`}
+                      href={`/categories/${name.toLowerCase()}`}
                       className="flex items-center gap-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 rounded-md px-2 py-1 transition-colors"
                     >
                       {name}
@@ -69,10 +80,10 @@ const DropdownMenu = ({ categories, popularProducts }: DropdownMenuProps) => {
                 Favourite Products
               </h4>
               <ul className="space-y-2">
-                {popularProducts.map(({ id, name, image }) => (
+                {popularProducts.map(({ id, name, image, category }) => (
                   <li key={id}>
                     <Link
-                      href={`/products/${id}`}
+                      href={`/products/${category.name.toLowerCase()}/${name.toLowerCase().replaceAll(' ', '-')}`}
                       className="flex items-center gap-4 text-sm text-gray-600 hover:text-black hover:bg-gray-100 rounded-md px-2 py-2 transition-colors"
                     >
                       <Image

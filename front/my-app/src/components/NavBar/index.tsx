@@ -8,7 +8,7 @@ import NavConfig, { NavItem } from '@/config/navConfig';
 import DropdownMenu, { DropdownMenuProps } from '../DropdownMenu';
 import { useAuth } from '@/context/usersContext';
 import { useCartContext } from '@/context/CartContext';
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon, UserIcon, ShoppingBagIcon } from '@heroicons/react/outline';
 import MobileDropdown from '../MobileDropdown';
 import AccountMenu from '../AccountMenu';
 
@@ -88,17 +88,15 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
             <li key="shopping-bag-icon">
               <Link href="/shopping-bag">
                 <StyledBadge badgeContent={totalItems} color="primary">
-                  <img
-                    src="/shopbag.svg"
+                  <ShoppingBagIcon
                     className="
-                      w-5 h-5
+                      w-6 h-6
                       hover:transform
                       hover:scale-125
                       transition-all
                       duration-200
                       ease-in-out
                     "
-                    alt="shopping bag"
                   />
                 </StyledBadge>
               </Link>

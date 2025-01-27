@@ -2,7 +2,6 @@
 
 import { useState, useContext, ReactNode, useEffect, createContext } from "react";
 import axios, { AxiosError } from "axios";
-import { IOrder } from "@/interfaces/IOrder";
 
 export interface ProductDetails {
     id: number;

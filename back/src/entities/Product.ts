@@ -1,4 +1,6 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -9,6 +11,7 @@ import {
 import { Category } from "./Category";
 import { CartItem } from "./CartItem";
 import { OrderProduct } from "./OrderProduct";
+import slugify from "slugify";
 
 @Entity({ name: "products" })
 export class Product {
@@ -42,4 +45,17 @@ export class Product {
 
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)
   orderProducts: OrderProduct[];
-}
+
+  @Column()
+  slug: string;
+  @BeforeInsert()
+  @BeforeUpdate()
+  generateSlug() {
+    if (this.name) {
+      this.slug = slugify(this.name, { 
+        lower: true,
+        strict: true,
+      });
+    }
+  }
+};

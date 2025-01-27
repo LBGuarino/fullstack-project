@@ -1,10 +1,11 @@
 import { useAuth } from "@/context/usersContext";
-import { Divider, Drawer, IconButton } from "@mui/material";
+import { Button, Divider, Drawer, IconButton } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import { dashboardConfig } from "./dashboardConfig";
 import Link from "next/link";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { UserIcon } from "@heroicons/react/outline";
 
 export default function AccountMenu() {
   const [open, setOpen] = useState(false);
@@ -30,7 +31,6 @@ export default function AccountMenu() {
 
   const DrawerList = (
     <div className="flex flex-col h-full">
-      {/* Header del Drawer */}
       <div className="flex flex-col items-center justify-center px-4 py-6 bg-white shadow-sm">
         <Image src="/user.svg" alt="user" width={28} height={28} className="rounded-full" />
         <p className="mt-3 text-base font-medium text-gray-800">
@@ -40,10 +40,8 @@ export default function AccountMenu() {
 
       <Divider />
 
-      {/* Lista principal */}
       <ul className="flex-1 overflow-y-auto px-4 py-2">
         {dashboardConfig.map((item) => {
-          // Detectamos si el ítem es "My Profile"
           const isMyProfile = item.name === "My Profile";
 
           return (
@@ -53,7 +51,6 @@ export default function AccountMenu() {
               onMouseEnter={() => handleMouseEnter(item.id)}
               onMouseLeave={handleMouseLeave}
             >
-              {/* Ítem principal */}
               <div
                 className={`
                   py-2 px-2 rounded-md 
@@ -71,7 +68,6 @@ export default function AccountMenu() {
                 </li>
               </div>
 
-              {/* Si tiene subTitles, los manejamos según sea MyProfile */}
               {item.subTitles?.length ? (
                 isMyProfile ? (
                   <ul
@@ -96,10 +92,6 @@ export default function AccountMenu() {
                     ))}
                   </ul>
                 ) : (
-                  /* 
-                    Para otros ítems, decidimos mostrarlos siempre en desktop 
-                    (o puedes adaptarlos al mismo efecto si quieres).
-                  */
                   <ul className="ml-4 border-l border-gray-200 hidden md:block">
                     {item.subTitles.map((subItem) => (
                       <li key={subItem.id} className="pl-2 py-1 text-right">
@@ -121,7 +113,6 @@ export default function AccountMenu() {
 
       <Divider />
 
-      {/* Footer */}
       <div className="px-4 py-3 flex items-center justify-between">
         <IconButton onClick={handleLogout} className="flex items-center gap-1">
           <LogoutIcon sx={{ fontSize: 20 }} />
@@ -137,27 +128,22 @@ export default function AccountMenu() {
 
   return (
     <>
-      {/* Botón para abrir Drawer */}
-      <IconButton
+      <button
         onClick={toggleDrawer(true)}
-        size="small"
         className="flex flex-row gap-2"
       >
-        <img
-          src="/user.svg"
+        <UserIcon
           className="
-            w-5 h-5
+            w-6 h-6
             hover:transform 
             hover:scale-125 
             transition-all 
             duration-200 
             ease-in-out
           "
-          alt="user icon"
         />
-      </IconButton>
+      </button>
 
-      {/* Drawer con fondo difuminado */}
       <Drawer
         open={open}
         onClose={toggleDrawer(false)}

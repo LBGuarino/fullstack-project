@@ -1,27 +1,41 @@
 import { DropdownMenuProps } from "@/components/DropdownMenu";
 import { ICategory } from "@/interfaces/ICategory";
+import { IProduct } from "@/interfaces/IProduct";
+
 
 export async function fetchDropdownData(): Promise<DropdownMenuProps> {
   const res = await fetch("http://localhost:3001/products/categories");
   const data: ICategory[] = await res.json();
 
-  const categories = data.map(({ name, id, products }) => ({
+  const categories = data.map(({ name, id }) => ({
     name,
-    products,
     id,
   }));  
 
-  const popularProducts = data.flatMap(({products}) => products.map((p) => ({
-    id: p.id,
-    name: p.name,
-    price: p.price,
-    image: p.image, 
-    description: p.description,
-    categoryId: p.categoryId
-  })));
-  
+  console.log(categories);
+
+  const response = await fetch("http://localhost:3001/products")
+  const allProducts: IProduct[] = await response.json();
+
+  const popularProducts = allProducts.map(({ 
+    name, 
+    id, 
+    image, 
+    category, 
+  }) => ({ 
+    name,
+    id,
+    image,
+    category: {
+      id: category.id,
+      name: category.name
+    }
+  }));
+
+  console.log(popularProducts);
+
   return {
-    categories,
-    popularProducts,
+  categories,
+  popularProducts,
   };
 }

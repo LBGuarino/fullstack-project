@@ -1,23 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { GoogleMapsProvider } from "@/components/GoogleMapsProvider";
 import Order from "@/components/Order";
 import ShoppingCartPC from "@/components/ShoppingCartPC";
 import { useCartContext } from "@/context/CartContext";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import AuthProvider from "@/context/usersContext";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
 export default function ShoppingBag() {
-  const { fetchCart, productsInCart } = useCartContext();
+  const { productsInCart } = useCartContext();
   const [showOrderMobile, setShowOrderMobile] = useState(false);
-
-  useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
 
   const totalAmount = productsInCart.reduce(
     (acc, item) => acc + item.product.price * item.quantity,
@@ -48,7 +43,6 @@ export default function ShoppingBag() {
   );
 
   return (
-    <AuthProvider>
       <Elements stripe={stripePromise}>
         <GoogleMapsProvider>
           <div className="block md:hidden w-full min-h-screen p-4">
@@ -97,6 +91,5 @@ export default function ShoppingBag() {
           </div>
         </GoogleMapsProvider>
       </Elements>
-    </AuthProvider>
   );
 }

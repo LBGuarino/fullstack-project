@@ -2,10 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ICategory } from '@/interfaces/ICategory';
 import { IProduct } from '@/interfaces/IProduct';
+import { ProductWCategory } from '../DropdownMenu';
 
 interface MobileDropdownProps {
   categories: ICategory[];
-  popularProducts: IProduct[];
+  popularProducts: ProductWCategory[];
 }
 
 const MobileDropdown: React.FC<MobileDropdownProps> = ({
