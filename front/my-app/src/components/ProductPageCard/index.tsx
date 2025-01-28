@@ -3,6 +3,7 @@ import Image from "next/image";
 import ProductCounter from "../ProductCounter";
 import { useCartContext } from "@/context/CartContext";
 import { useState } from "react";
+import AnimatedPage from "../AnimatedPage";
 
 export interface ProductPageCardProps {
   id: number;
@@ -31,6 +32,7 @@ export const ProductPageCard: React.FC<ProductPageCardProps> = ({
   };
 
   return (
+    <AnimatedPage>
     <div className="flex flex-col md:flex-row gap-8">
       <div className="flex-1 flex items-center justify-center">
         <Image
@@ -71,5 +73,6 @@ export const ProductPageCard: React.FC<ProductPageCardProps> = ({
         </div>
       </div>
     </div>
+    </AnimatedPage>
   );
 };

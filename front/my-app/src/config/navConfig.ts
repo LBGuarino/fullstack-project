@@ -11,7 +11,7 @@ const NavConfig: NavItem[] = [
     },
     {
         text: 'About Us',
-        path: '/about-us',
+        path: '/about_us',
     },
 
 ];

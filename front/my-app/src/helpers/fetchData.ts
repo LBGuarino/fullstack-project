@@ -16,8 +16,6 @@ export async function fetchDropdownData(): Promise<DropdownMenuProps> {
     id,
   }));  
 
-  console.log(categories);
-
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
   const allProducts: IProduct[] = await response.json();
 

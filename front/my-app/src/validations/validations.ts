@@ -61,5 +61,35 @@ export const loginSchema = z
         .string().min(8, 'Password must be at least 8 characters long').nonempty('Password is required'),
     })
       
+export const modifySchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(2, "Full name must be at least 2 characters")
+      .max(50, "Full name cannot exceed 50 characters")
+      .nonempty("Full name is required"),
+
+    address: z
+      .string()
+      .trim()
+      .min(5, "Address must be at least 5 characters")
+      .nonempty("Address is required"),
+
+    phone: z
+      .string()
+      .nonempty("Phone is required")
+      .regex(
+        /^[0-9+\-\s()]*$/,
+        "Phone can only contain numbers, spaces, '()', '-' or '+'"
+      ),
+
+    email: z
+      .string()
+      .email("Invalid email format")
+      .nonempty("Email is required"),
+  })
+
 export type SignupFormInputs = z.infer<typeof signupSchema>;
 export type LoginFormInputs = z.infer<typeof loginSchema>;
+export type ModifyFormInputs = z.infer<typeof modifySchema>;

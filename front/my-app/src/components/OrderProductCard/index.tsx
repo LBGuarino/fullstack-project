@@ -18,7 +18,7 @@ export default function OrderProductCard({
     <div className="min-w-[280px] max-w-sm bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 snap-center flex-shrink-0">
       <div className="px-4 py-3 border-b border-gray-200">
         <p className="text-sm font-semibold text-cyan-600">
-          Order ID: {id}
+          Order ID: {`${id.toString()}`.padStart(3, "oc").padStart(4, "p")}
         </p>
         <p className="text-sm text-gray-700">
           Status: {status}

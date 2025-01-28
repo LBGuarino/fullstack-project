@@ -24,12 +24,12 @@ export const dashboardConfig: DashboardConfig[] = [
             {
                 id: 1,
                 name: "Addresses",
-                path: "/my-profile/addresses"
+                path: "/my_profile/addresses"
             },
             {
                 id: 2,
                 name: "Profile Settings",
-                path: "/my-profile/config"
+                path: "/my_profile/settings"
             }
         ]
     },

@@ -1,6 +1,6 @@
 'use client';
 
-import { OrderFormInputs } from "@/validations/validations";
+import { OrderFormInputs } from "@/validations/orderFormSchema";
 import React, { useState, useEffect } from "react";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import usePlacesAutocomplete, { getGeocode, getDetails } from "use-places-autocomplete";

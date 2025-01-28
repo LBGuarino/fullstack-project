@@ -53,14 +53,14 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onBackToForm, onSubmitOrder
     return (
         <div className="p-4 h-full w-full overflow-y-auto max-h-screen">
             <form className="flex flex-col gap-6 p-4" onSubmit={handleSubmit}>
-                <h2 className="text-xl font-semibold text-gray-700 mb-6">Detalles de Pago</h2>
+                <h2 className="text-xl font-semibold text-gray-700 mb-6">Payment Info</h2>
 
                 <div>
                     <label
                         htmlFor="card-element"
                         className="block text-base font-normal text-gray-700 mb-3"
                     >
-                        Detalles de la Tarjeta
+                        Card Details
                     </label>
                     <CardElement
                         id="card-element"
@@ -91,7 +91,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ onBackToForm, onSubmitOrder
                         className="bg-transparent text-gray-500 hover:text-gray-600 font-semibold rounded-lg py-3 px-6"
                         disabled={isProcessing}
                     >
-                        Atrás
+                        Back
                     </button>
                     <button
                         type="submit"

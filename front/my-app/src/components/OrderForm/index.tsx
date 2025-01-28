@@ -142,7 +142,8 @@ export default function OrderForm({
             {watchPickupPoint && (
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md">
                     <h2 className="text-lg font-semibold text-gray-800 mb-4">Available Pickup Points</h2>
-                    <ul className="space-y-4">
+                    <ul
+                    className="space-y-4">
                         {pickupPoints.map((point) => (
                             <li
                                 key={point.id}
@@ -154,7 +155,7 @@ export default function OrderForm({
                                     <p className="text-sm text-gray-500">Hours: {point.hours}</p>
                                 </div>
                                 <input
-                                    type="checkbox"
+                                    type="radio"
                                     {...register('pickupPoint')}
                                     value={point.id}
                                     className="w-4 h-4 text-cyan-700 border-gray-300 rounded-xl focus:ring-cyan-600"

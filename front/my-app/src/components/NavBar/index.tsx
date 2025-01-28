@@ -63,8 +63,9 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
           <li
             className="hover:text-white transition-all duration-200 ease-in-out font-light"
             key={`${el.text}-${el.path}`}
-          >
-            <Link href={el.path}>{el.text}</Link>
+            >
+            <Link 
+            href={el.path}>{el.text}</Link>
           </li>
         ))}
       </ul>
@@ -147,6 +148,7 @@ export default function NavBar({ dropdownProps }: NavBarProps) {
                 key={`${el.text}-${el.path}`}
                 href={el.path}
                 className="text-sm text-gray-700 py-2 px-2 border-b hover:bg-gray-100"
+                onClick={closeMobileMenu}
               >
                 {el.text}
               </Link>

@@ -120,7 +120,7 @@ export default function AccountMenu() {
         </IconButton>
 
         <IconButton className="flex items-center gap-1">
-          <p className="text-sm">Need Help?</p>
+          <Link href="/support" className="text-sm">Need Help?</Link>
         </IconButton>
       </div>
     </div>

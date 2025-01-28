@@ -1,4 +1,3 @@
-// components/Order.tsx
 'use client';
 
 import { useState, useEffect } from "react";
@@ -12,10 +11,9 @@ import { OrderFormInputs, orderFormSchema } from "@/validations/orderFormSchema"
 import { PaymentMethodData } from "./types";
 import { CartItem, useCartContext } from "@/context/CartContext";
 import { useAuth } from "@/context/usersContext";
-import { useRouter } from "next/navigation";
 export interface OrderProps {
-    products: CartItem[]; 
-    totalAmount: number; 
+    products: CartItem[];
+    totalAmount: number;
 }
 
 const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
@@ -26,7 +24,6 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
     const { user } = useAuth();
     const { clearCart } = useCartContext();
     const stripe = useStripe();
-    const router = useRouter();
 
     const {
         register,
@@ -59,7 +56,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
 
         try {
             const response = await axios.post<{ client_secret: string; status: string; next_action?: { type: string } }>(
-                "http://localhost:3001/payment/create-payment-intent",
+                `${process.env.NEXT_PUBLIC_API_URL}/payment/create-payment-intent`,
                 {
                     paymentMethodId,
                     amount: totalAmount * 100,
@@ -70,8 +67,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
 
             if (status === "requires_action" && next_action?.type === "use_stripe_sdk") {
             } else if (status === "requires_confirmation" || status === "succeeded") {
-                console.log(productsWQuantity);
-                await axios.post("http://localhost:3001/orders", {
+                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
                     userId: user?.id,
                     paymentMethodId,
                     products: productsWQuantity,
@@ -83,7 +79,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
             } else {
                 setPaymentError("An error occurred during payment confirmation2.");
             }
-                    
+
         } catch (error: unknown) {
             const axiosError = error as AxiosError;
             setPaymentError(axiosError.message ?? "An error occurred during payment confirmation.");
@@ -96,10 +92,13 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
     };
 
     useEffect(() => {
-        if (paymentSuccess) {
-            clearCart();
-            router.push("/confirmation_page");
-        }
+    if (paymentSuccess) {
+        const timer = setTimeout(async () => {
+            await clearCart();
+            window.location.href = "/confirmation_page";
+        }, 3000);
+        return () => clearTimeout(timer);
+    }
     }, [paymentSuccess]);
 
     useEffect(() => {

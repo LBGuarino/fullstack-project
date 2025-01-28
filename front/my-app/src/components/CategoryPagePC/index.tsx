@@ -3,6 +3,7 @@ import { useCartContext } from "@/context/CartContext";
 import Image from "next/image";
 import ProductCounter from "../ProductCounter";
 import { useState } from "react";
+import AnimatedPage from "../AnimatedPage";
 
 export interface CategoryPagePCProps {
   id: number;
@@ -27,6 +28,7 @@ export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
   };
 
   return (
+    <AnimatedPage>
     <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 overflow-hidden flex flex-col">
       <div className="h-48 sm:h-60 md:h-72 lg:h-80 flex justify-center items-center">
         <Image
@@ -61,6 +63,7 @@ export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
         </button>
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 
