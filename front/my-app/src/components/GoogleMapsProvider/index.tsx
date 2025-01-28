@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LoadScript, useLoadScript } from '@react-google-maps/api';
+import { LoadScript } from '@react-google-maps/api';
 
 const libraries: ("places")[] = ["places"];
 

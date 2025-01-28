@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from "@/context/usersContext";
-import { ModifyFormInputs, modifySchema, SignupFormInputs, signupSchema } from "@/validations/validations";
+import { ModifyFormInputs, modifySchema } from "@/validations/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
