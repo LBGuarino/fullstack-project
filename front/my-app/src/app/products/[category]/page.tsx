@@ -14,7 +14,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="max-w-screen-xl mx-auto p-8">
       <div className="mb-8">
-      <Breadcrumbs aria-label="breadcrumb" className="mb-4 text-sm text-gray-500">
+      <Breadcrumbs aria-label="breadcrumb" className="mb-4 text-sm text-gray-400">
         <Link href="/" className="hover:underline hover:text-cyan-700">
           Home
         </Link>
