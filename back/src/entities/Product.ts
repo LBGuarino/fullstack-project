@@ -24,7 +24,15 @@ export class Product {
   @Column({ name: "description", type: "text" })
   description: string;
 
-  @Column({ name: "price", type: "decimal", precision: 10, scale: 2 })
+  @Column({ name: "price", 
+    type: "decimal", 
+    precision: 10, 
+    scale: 2,
+    transformer: {  // ← Required for decimal handling
+      from: (value: string) => parseFloat(value),
+      to: (value: number) => value
+    }
+  })
   price: number;
 
   @Column({ name: "stock", type: "int" })
@@ -32,10 +40,7 @@ export class Product {
 
   @Column({ name: "image", type: "varchar", length: 255 })
   image: string;
-
-  @Column({ name: "category_id", type: "int" })
-  categoryId: number;
-
+  
   @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE" })
   @JoinColumn({ name: "category_id" })
   category: Category;

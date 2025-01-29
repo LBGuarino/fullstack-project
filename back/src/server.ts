@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-  origin: ["https://www.thescentedshop.blog", "https://thescentedshop.blog"],
+  origin: ["https://www.thescentedshop.blog", "https://thescentedshop.blog", "http://localhost:3000"],
   credentials: true,
 }));
 app.use(express.json());
