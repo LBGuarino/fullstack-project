@@ -29,7 +29,7 @@ export class Order {
   user: User;
 
   @Column({ nullable: false })
-  paymentmethodid: string;
+  paymentMethodId: string;
 
   @OneToOne(() => OrderData, (orderData) => orderData.order, { cascade: true })
   orderData: OrderData;

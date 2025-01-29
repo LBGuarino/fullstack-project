@@ -19,7 +19,7 @@ export class OrderData {
     email: string;
 
     @Column({ nullable: true })
-    pickuppoint: number;
+    pickupPoint: number | undefined;
 
     @OneToOne(() => Order, (order) => order.orderData)
     @JoinColumn({ name: "orderid" })
