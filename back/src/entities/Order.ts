@@ -2,15 +2,12 @@ import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
-import { Product } from "./Product";
 import { OrderData } from "./OrderData";
 import { OrderProduct } from "./OrderProduct";
 
@@ -28,7 +25,7 @@ export class Order {
   date: Date;
 
   @ManyToOne(() => User, (user) => user.orders)
-  @JoinColumn({ name: "userId" })
+  @JoinColumn({ name: "userid" })
   user: User;
 
   @Column({ nullable: false })

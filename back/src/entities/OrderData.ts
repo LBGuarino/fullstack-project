@@ -22,6 +22,6 @@ export class OrderData {
     pickupPoint?: number;
 
     @OneToOne(() => Order, (order) => order.orderData)
-    @JoinColumn({ name: "orderId" })
+    @JoinColumn({ name: "orderid" })
     order: Order;
 }
