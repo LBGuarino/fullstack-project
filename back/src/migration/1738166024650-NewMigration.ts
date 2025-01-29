@@ -8,6 +8,10 @@ export class NewMigration1738166024650 implements MigrationInterface {
         password VARCHAR(255) NOT NULL
       );
 
+      CREATE TABLE carts (
+        id SERIAL PRIMARY KEY
+      );
+
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
@@ -21,11 +25,8 @@ export class NewMigration1738166024650 implements MigrationInterface {
         CONSTRAINT fk_user_cart FOREIGN KEY (cartid) REFERENCES carts(id) ON DELETE CASCADE
       );
 
-      CREATE TABLE carts (
-        id SERIAL PRIMARY KEY,
-        userid INTEGER UNIQUE,
-        CONSTRAINT fk_cart_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
-      );
+      ALTER TABLE carts ADD COLUMN userid INTEGER UNIQUE;
+      ALTER TABLE carts ADD CONSTRAINT fk_cart_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE;
 
       CREATE TABLE categories (
         id SERIAL PRIMARY KEY,
@@ -92,8 +93,8 @@ export class NewMigration1738166024650 implements MigrationInterface {
       DROP TABLE cart_items;
       DROP TABLE products;
       DROP TABLE categories;
-      DROP TABLE carts;
       DROP TABLE users;
+      DROP TABLE carts;
       DROP TABLE credentials;
     `);
   }
