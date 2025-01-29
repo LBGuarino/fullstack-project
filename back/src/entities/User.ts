@@ -38,7 +38,7 @@ export class User {
     role: Role;
 
     @OneToOne(() => Credential)
-    @JoinColumn()
+    @JoinColumn({name: "credentialid"})
     credential: Credential;
 
     @OneToMany(() => Order, order => order.user)

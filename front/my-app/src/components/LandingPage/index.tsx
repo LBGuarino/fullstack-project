@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -17,27 +17,23 @@ export default function LandingPage() {
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 🔹 Mejor rendimiento en móviles reduciendo el blur en pantallas pequeñas
   const blurIntensity = Math.min(scrollY / 300, 1);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const backgroundStyle = {
-    filter: `blur(${blurIntensity * 10}px)`,
+    filter: isMobile ? "none" : `blur(${blurIntensity * 10}px)`,
+    backdropFilter: isMobile ? "none" : `blur(${blurIntensity * 10}px)`,
     opacity: `${1 - blurIntensity}`,
     transition: "filter 0.3s ease, opacity 0.3s ease",
   };
 
   useEffect(() => {
     getProducts()
-      .then((res) => {
-        setProducts(res);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+      .then((res) => setProducts(res))
+      .catch((error) => alert(error.message));
   }, []);
 
   return (
