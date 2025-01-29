@@ -18,7 +18,7 @@ export class OrderData {
     @Column({ nullable: false })
     email: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, name: "pickuppoint" })
     pickupPoint?: number;
 
     @OneToOne(() => Order, (order) => order.orderData)

@@ -28,7 +28,7 @@ export class Order {
   @JoinColumn({ name: "userid" })
   user: User;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: "paymentmethodid" })
   paymentMethodId: string;
 
   @OneToOne(() => OrderData, (orderData) => orderData.order, { cascade: true })
