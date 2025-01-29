@@ -33,7 +33,7 @@ export class Product {
   @Column()
   image: string;
 
-  @Column()
+  @Column({ name: "categoryid" })
   categoryId: number;
 
   @ManyToOne(() => Category, (category) => category.products)
