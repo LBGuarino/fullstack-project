@@ -50,17 +50,11 @@ exports.getSession = (0, catchedController_1.catchedController)((req, res) => __
     var _a;
     try {
         const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
-        if (!token) {
-            return res.status(401).json({ message: "No session found" });
-        }
         const decoded = jsonwebtoken_1.default.verify(token, envs_1.JWT_SECRET);
         const user = yield user_repository_1.UserRepository.findOne({
             where: { id: decoded.userId },
             relations: ["orders"],
         });
-        if (!user) {
-            return res.status(401).json({ message: "Invalid session" });
-        }
         return res.status(200).json({ user });
     }
     catch (error) {

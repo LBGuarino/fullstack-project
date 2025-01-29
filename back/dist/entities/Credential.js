@@ -15,11 +15,11 @@ let Credential = class Credential {
 };
 exports.Credential = Credential;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], Credential.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "password", type: "varchar", length: 255 }),
     __metadata("design:type", String)
 ], Credential.prototype, "password", void 0);
 exports.Credential = Credential = __decorate([

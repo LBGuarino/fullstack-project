@@ -23,50 +23,46 @@ let User = class User {
 };
 exports.User = User;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        nullable: false
-    }),
+    (0, typeorm_1.Column)({ name: "name", type: "varchar", length: 255, nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        unique: true,
-        nullable: false
-    }),
+    (0, typeorm_1.Column)({ name: "email", type: "varchar", length: 255, unique: true, nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "address", type: "varchar", length: 255, nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "phone", type: "varchar", length: 20, nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "phone", void 0);
 __decorate([
     (0, typeorm_1.Column)({
+        name: "role",
         type: "enum",
         enum: Role,
-        default: Role.USER
+        default: Role.USER,
     }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => Credential_1.Credential),
-    (0, typeorm_1.JoinColumn)(),
+    (0, typeorm_1.OneToOne)(() => Credential_1.Credential, { cascade: true, onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "credential_id" }),
     __metadata("design:type", Credential_1.Credential)
 ], User.prototype, "credential", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => Order_1.Order, order => order.user),
+    (0, typeorm_1.OneToMany)(() => Order_1.Order, (order) => order.user),
     __metadata("design:type", Array)
 ], User.prototype, "orders", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => Cart_1.Cart, (cart) => cart.user, { cascade: true }),
-    (0, typeorm_1.JoinColumn)(),
+    (0, typeorm_1.OneToOne)(() => Cart_1.Cart, (cart) => cart.user, { cascade: true, onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "cart_id" }),
     __metadata("design:type", Cart_1.Cart)
 ], User.prototype, "cart", void 0);
 exports.User = User = __decorate([

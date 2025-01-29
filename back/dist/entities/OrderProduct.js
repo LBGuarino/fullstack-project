@@ -17,19 +17,21 @@ let OrderProduct = class OrderProduct {
 };
 exports.OrderProduct = OrderProduct;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], OrderProduct.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => Order_1.Order, (order) => order.orderProducts),
+    (0, typeorm_1.ManyToOne)(() => Order_1.Order, (order) => order.orderProducts, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "order_id" }),
     __metadata("design:type", Order_1.Order)
 ], OrderProduct.prototype, "order", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => Product_1.Product, (product) => product.orderProducts),
+    (0, typeorm_1.ManyToOne)(() => Product_1.Product, (product) => product.orderProducts, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "product_id" }),
     __metadata("design:type", Product_1.Product)
 ], OrderProduct.prototype, "product", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "quantity", type: "int" }),
     __metadata("design:type", Number)
 ], OrderProduct.prototype, "quantity", void 0);
 exports.OrderProduct = OrderProduct = __decorate([

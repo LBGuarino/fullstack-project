@@ -30,36 +30,36 @@ let Product = class Product {
 };
 exports.Product = Product;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], Product.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "name", type: "varchar", length: 255 }),
     __metadata("design:type", String)
 ], Product.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "description", type: "text" }),
     __metadata("design:type", String)
 ], Product.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "price", type: "decimal", precision: 10, scale: 2 }),
     __metadata("design:type", Number)
 ], Product.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "stock", type: "int" }),
     __metadata("design:type", Number)
 ], Product.prototype, "stock", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "image", type: "varchar", length: 255 }),
     __metadata("design:type", String)
 ], Product.prototype, "image", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "category_id", type: "int" }),
     __metadata("design:type", Number)
 ], Product.prototype, "categoryId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => Category_1.Category, (category) => category.products),
-    (0, typeorm_1.JoinColumn)({ name: "categoryId" }),
+    (0, typeorm_1.ManyToOne)(() => Category_1.Category, (category) => category.products, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "category_id" }),
     __metadata("design:type", Category_1.Category)
 ], Product.prototype, "category", void 0);
 __decorate([
@@ -71,7 +71,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Product.prototype, "orderProducts", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: "slug", type: "varchar", length: 255, unique: true }),
     __metadata("design:type", String)
 ], Product.prototype, "slug", void 0);
 __decorate([
@@ -84,4 +84,3 @@ __decorate([
 exports.Product = Product = __decorate([
     (0, typeorm_1.Entity)({ name: "products" })
 ], Product);
-;

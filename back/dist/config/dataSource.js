@@ -12,6 +12,7 @@ const Cart_1 = require("../entities/Cart");
 const CartItem_1 = require("../entities/CartItem");
 const OrderData_1 = require("../entities/OrderData");
 const OrderProduct_1 = require("../entities/OrderProduct");
+const isProd = process.env.NODE_ENV === "production";
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
     host: envs_1.DB_HOST,
@@ -24,5 +25,5 @@ exports.AppDataSource = new typeorm_1.DataSource({
     logging: true,
     entities: [User_1.User, Credential_1.Credential, Order_1.Order, OrderData_1.OrderData, OrderProduct_1.OrderProduct, Product_1.Product, Category_1.Category, Cart_1.Cart, CartItem_1.CartItem],
     subscribers: [],
-    migrations: ['src/migration/**/*.ts'],
+    migrations: [isProd ? "dist/migration/*.js" : "src/migration/*.ts"],
 });

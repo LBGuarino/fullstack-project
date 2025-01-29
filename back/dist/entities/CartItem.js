@@ -17,19 +17,21 @@ let CartItem = class CartItem {
 };
 exports.CartItem = CartItem;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], CartItem.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => Cart_1.Cart, (cart) => cart.items, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "cart_id" }),
     __metadata("design:type", Cart_1.Cart)
 ], CartItem.prototype, "cart", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => Product_1.Product, (product) => product.cartItems, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "product_id" }),
     __metadata("design:type", Product_1.Product)
 ], CartItem.prototype, "product", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: "int" }),
+    (0, typeorm_1.Column)({ type: "int", name: "quantity" }),
     __metadata("design:type", Number)
 ], CartItem.prototype, "quantity", void 0);
 exports.CartItem = CartItem = __decorate([

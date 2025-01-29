@@ -16,32 +16,32 @@ let OrderData = class OrderData {
 };
 exports.OrderData = OrderData;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], OrderData.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false }),
+    (0, typeorm_1.Column)({ name: "name", type: "varchar", length: 255, nullable: false }),
     __metadata("design:type", String)
 ], OrderData.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false }),
+    (0, typeorm_1.Column)({ name: "phone", type: "varchar", length: 20, nullable: false }),
     __metadata("design:type", String)
 ], OrderData.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false }),
+    (0, typeorm_1.Column)({ name: "address", type: "varchar", length: 255, nullable: false }),
     __metadata("design:type", String)
 ], OrderData.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false }),
+    (0, typeorm_1.Column)({ name: "email", type: "varchar", length: 255, nullable: false }),
     __metadata("design:type", String)
 ], OrderData.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ name: "pickup_point", type: "int", nullable: true }),
     __metadata("design:type", Number)
 ], OrderData.prototype, "pickupPoint", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => Order_1.Order, (order) => order.orderData),
-    (0, typeorm_1.JoinColumn)({ name: "orderId" }),
+    (0, typeorm_1.OneToOne)(() => Order_1.Order, (order) => order.orderData, { onDelete: "CASCADE" }),
+    (0, typeorm_1.JoinColumn)({ name: "order_id" }),
     __metadata("design:type", Order_1.Order)
 ], OrderData.prototype, "order", void 0);
 exports.OrderData = OrderData = __decorate([

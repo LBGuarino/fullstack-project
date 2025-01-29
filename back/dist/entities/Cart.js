@@ -17,11 +17,12 @@ let Cart = class Cart {
 };
 exports.Cart = Cart;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)({ name: "id" }),
     __metadata("design:type", Number)
 ], Cart.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => User_1.User, (user) => user.cart),
+    (0, typeorm_1.JoinColumn)({ name: "user_id" }),
     __metadata("design:type", User_1.User)
 ], Cart.prototype, "user", void 0);
 __decorate([
