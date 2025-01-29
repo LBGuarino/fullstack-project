@@ -21,12 +21,12 @@ export class NewMigration1738166024650 implements MigrationInterface {
         role VARCHAR(20) DEFAULT 'user',
         credentialid INTEGER UNIQUE,
         cartid INTEGER UNIQUE,
-        CONSTRAINT fk_user_credential FOREIGN KEY (credentialid) REFERENCES credentials(id) ON DELETE CASCADE,
-        CONSTRAINT fk_user_cart FOREIGN KEY (cartid) REFERENCES carts(id) ON DELETE CASCADE
+        CONSTRAINT fk_user_credential FOREIGN KEY (credentialid) REFERENCES credentials(id) ON DELETE CASCADE
       );
 
       ALTER TABLE carts ADD COLUMN userid INTEGER UNIQUE;
       ALTER TABLE carts ADD CONSTRAINT fk_cart_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE;
+      ALTER TABLE users ADD CONSTRAINT fk_user_cart FOREIGN KEY (cartid) REFERENCES carts(id) ON DELETE CASCADE;
 
       CREATE TABLE categories (
         id SERIAL PRIMARY KEY,
@@ -59,7 +59,7 @@ export class NewMigration1738166024650 implements MigrationInterface {
         status VARCHAR(50) NOT NULL,
         date TIMESTAMP NOT NULL DEFAULT NOW(),
         userid INTEGER NOT NULL,
-        paymentmethodid VARCHAR(255) NOT NULL,
+        paymentMethodId VARCHAR(255) NOT NULL,
         CONSTRAINT fk_order_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
       );
 
@@ -69,7 +69,7 @@ export class NewMigration1738166024650 implements MigrationInterface {
         phone VARCHAR(20) NOT NULL,
         address VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
-        pickuppoint INTEGER NULL,
+        pickupPoint INTEGER NULL,
         orderid INTEGER UNIQUE NOT NULL,
         CONSTRAINT fk_orderData_order FOREIGN KEY (orderid) REFERENCES orders(id) ON DELETE CASCADE
       );
