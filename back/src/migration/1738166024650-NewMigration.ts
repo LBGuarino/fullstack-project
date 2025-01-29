@@ -16,7 +16,9 @@ export class NewMigration1738166024650 implements MigrationInterface {
         phone VARCHAR(20),
         role VARCHAR(20) DEFAULT 'user',
         credentialid INTEGER UNIQUE,
-        CONSTRAINT fk_user_credential FOREIGN KEY (credentialid) REFERENCES credentials(id) ON DELETE CASCADE
+        cartid INTEGER UNIQUE,
+        CONSTRAINT fk_user_credential FOREIGN KEY (credentialid) REFERENCES credentials(id) ON DELETE CASCADE,
+        CONSTRAINT fk_user_cart FOREIGN KEY (cartid) REFERENCES carts(id) ON DELETE CASCADE
       );
 
       CREATE TABLE carts (

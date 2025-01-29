@@ -45,7 +45,7 @@ export class User {
     orders: Order[];
 
     @OneToOne(() => Cart, (cart) => cart.user, { cascade: true })
-    @JoinColumn()
+    @JoinColumn({name: "cartid"})
     cart: Cart;
 }
 
