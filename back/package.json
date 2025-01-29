@@ -8,6 +8,7 @@
   "start:dev": "nodemon --exec ts-node src/index.ts",
   "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
   "build": "tsc",
+  "migrate:new": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d ./dist/config/dataSource.js",
   "migrate": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./dist/config/dataSource.js",
   "migrate:revert": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./dist/config/dataSource.js",
   "schema:drop": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./dist/config/dataSource.js"

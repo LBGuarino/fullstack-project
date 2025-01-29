@@ -1,26 +1,28 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class ManualMigration1738158819257 implements MigrationInterface {
+export class NewMigration1738166024650 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
+      CREATE TABLE credentials (
+        id SERIAL PRIMARY KEY,
+        password VARCHAR(255) NOT NULL
+      );
+
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
         address VARCHAR(255),
         phone VARCHAR(20),
-        role VARCHAR(20) DEFAULT 'user'
-      );
-
-      CREATE TABLE credentials (
-        id SERIAL PRIMARY KEY,
-        password VARCHAR(255) NOT NULL
+        role VARCHAR(20) DEFAULT 'user',
+        credentialid INTEGER UNIQUE,
+        CONSTRAINT fk_user_credential FOREIGN KEY (credentialid) REFERENCES credentials(id) ON DELETE CASCADE
       );
 
       CREATE TABLE carts (
         id SERIAL PRIMARY KEY,
-        userId INTEGER UNIQUE,
-        CONSTRAINT fk_cart_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+        userid INTEGER UNIQUE,
+        CONSTRAINT fk_cart_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
       );
 
       CREATE TABLE categories (
@@ -35,27 +37,27 @@ export class ManualMigration1738158819257 implements MigrationInterface {
         price DECIMAL(10,2) NOT NULL,
         stock INTEGER NOT NULL,
         image VARCHAR(255) NOT NULL,
-        categoryId INTEGER NOT NULL,
+        categoryid INTEGER NOT NULL,
         slug VARCHAR(255) UNIQUE NOT NULL,
-        CONSTRAINT fk_product_category FOREIGN KEY (categoryId) REFERENCES categories(id) ON DELETE CASCADE
+        CONSTRAINT fk_product_category FOREIGN KEY (categoryid) REFERENCES categories(id) ON DELETE CASCADE
       );
 
       CREATE TABLE cart_items (
         id SERIAL PRIMARY KEY,
-        cartId INTEGER NOT NULL,
-        productId INTEGER NOT NULL,
+        cartid INTEGER NOT NULL,
+        productid INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
-        CONSTRAINT fk_cartItem_cart FOREIGN KEY (cartId) REFERENCES carts(id) ON DELETE CASCADE,
-        CONSTRAINT fk_cartItem_product FOREIGN KEY (productId) REFERENCES products(id) ON DELETE CASCADE
+        CONSTRAINT fk_cartItem_cart FOREIGN KEY (cartid) REFERENCES carts(id) ON DELETE CASCADE,
+        CONSTRAINT fk_cartItem_product FOREIGN KEY (productid) REFERENCES products(id) ON DELETE CASCADE
       );
 
       CREATE TABLE orders (
         id SERIAL PRIMARY KEY,
         status VARCHAR(50) NOT NULL,
         date TIMESTAMP NOT NULL DEFAULT NOW(),
-        userId INTEGER NOT NULL,
+        userid INTEGER NOT NULL,
         paymentMethodId VARCHAR(255) NOT NULL,
-        CONSTRAINT fk_order_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+        CONSTRAINT fk_order_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
       );
 
       CREATE TABLE order_data (
@@ -65,17 +67,17 @@ export class ManualMigration1738158819257 implements MigrationInterface {
         address VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
         pickupPoint INTEGER NULL,
-        orderId INTEGER UNIQUE NOT NULL,
-        CONSTRAINT fk_orderData_order FOREIGN KEY (orderId) REFERENCES orders(id) ON DELETE CASCADE
+        orderid INTEGER UNIQUE NOT NULL,
+        CONSTRAINT fk_orderData_order FOREIGN KEY (orderid) REFERENCES orders(id) ON DELETE CASCADE
       );
 
       CREATE TABLE order_products (
         id SERIAL PRIMARY KEY,
-        orderId INTEGER NOT NULL,
-        productId INTEGER NOT NULL,
+        orderid INTEGER NOT NULL,
+        productid INTEGER NOT NULL,
         quantity INTEGER NOT NULL,
-        CONSTRAINT fk_orderProduct_order FOREIGN KEY (orderId) REFERENCES orders(id) ON DELETE CASCADE,
-        CONSTRAINT fk_orderProduct_product FOREIGN KEY (productId) REFERENCES products(id) ON DELETE CASCADE
+        CONSTRAINT fk_orderProduct_order FOREIGN KEY (orderid) REFERENCES orders(id) ON DELETE CASCADE,
+        CONSTRAINT fk_orderProduct_product FOREIGN KEY (productid) REFERENCES products(id) ON DELETE CASCADE
       );
     `);
   }
@@ -89,8 +91,8 @@ export class ManualMigration1738158819257 implements MigrationInterface {
       DROP TABLE products;
       DROP TABLE categories;
       DROP TABLE carts;
-      DROP TABLE credentials;
       DROP TABLE users;
+      DROP TABLE credentials;
     `);
   }
 }
