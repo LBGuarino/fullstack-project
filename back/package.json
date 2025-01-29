@@ -3,9 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon --exec ts-node src/index.ts"
-  },
+"scripts": {
+  "start": "node dist/index.js", 
+  "start:dev": "nodemon --exec ts-node src/index.ts",
+  "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+  "build": "tsc",
+  "migrate": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./dist/config/dataSource.js",
+  "migrate:revert": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./dist/config/dataSource.js",
+  "schema:drop": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./dist/config/dataSource.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -36,6 +42,7 @@
     "@types/swagger-ui-express": "^4.1.6",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
   }
 }
