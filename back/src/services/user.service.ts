@@ -47,7 +47,9 @@ export const loginUserService = async (
   if (
     await checkPasswordService(loginUserDto.password, user.credential.password)
   ) {
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
     return {
       user,
