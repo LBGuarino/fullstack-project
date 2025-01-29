@@ -15,20 +15,20 @@ import { OrderProduct } from "./OrderProduct";
 
 @Entity({ name: "orders" })
 export class Order {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({name: "id"})
   id: number;
 
-  @Column()
+  @Column({ name: "status", type: "varchar", length: 50 })
   status: string;
 
-  @Column()
+  @Column({ name: "date", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   date: Date;
 
-  @ManyToOne(() => User, (user) => user.orders)
-  @JoinColumn({ name: "userid" })
+  @ManyToOne(() => User, (user) => user.orders, { onDelete: "CASCADE" }) 
+  @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Column({ nullable: false, name: "paymentmethodid" })
+  @Column({ name: "payment_method_id", type: "varchar", length: 255 })
   paymentMethodId: string;
 
   @OneToOne(() => OrderData, (orderData) => orderData.order, { cascade: true })

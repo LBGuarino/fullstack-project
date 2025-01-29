@@ -1,51 +1,54 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Credential } from "./Credential";
-import { Order } from "./Order";
-import { Cart } from "./Cart";
-
-enum Role {
+import {
+    Column,
+    Entity,
+    JoinColumn,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
+  } from "typeorm";
+  import { Credential } from "./Credential";
+  import { Order } from "./Order";
+  import { Cart } from "./Cart";
+  
+  enum Role {
     ADMIN = "admin",
-    USER = "user"
-}
-
-@Entity({ name: "users" })
-export class User {
-    @PrimaryGeneratedColumn()
+    USER = "user",
+  }
+  
+  @Entity({ name: "users" })
+  export class User {
+    @PrimaryGeneratedColumn({ name: "id" })
     id: number;
-
-    @Column({
-        nullable: false
-    })
+  
+    @Column({ name: "name", type: "varchar", length: 255, nullable: false })
     name: string;
-
-    @Column({
-        unique: true,
-        nullable: false
-    })
+  
+    @Column({ name: "email", type: "varchar", length: 255, unique: true, nullable: false })
     email: string;
-
-    @Column()
+  
+    @Column({ name: "address", type: "varchar", length: 255, nullable: true })
     address: string;
-
-    @Column()
+  
+    @Column({ name: "phone", type: "varchar", length: 20, nullable: true })
     phone: string;
-
+  
     @Column({
-        type: "enum",
-        enum: Role,
-        default: Role.USER
+      name: "role",
+      type: "enum",
+      enum: Role,
+      default: Role.USER,
     })
     role: Role;
-
-    @OneToOne(() => Credential)
-    @JoinColumn({name: "credentialid"})
+  
+    @OneToOne(() => Credential, { cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "credential_id" })
     credential: Credential;
-
-    @OneToMany(() => Order, order => order.user)
+  
+    @OneToMany(() => Order, (order) => order.user)
     orders: Order[];
-
-    @OneToOne(() => Cart, (cart) => cart.user, { cascade: true })
-    @JoinColumn({name: "cartid"})
+  
+    @OneToOne(() => Cart, (cart) => cart.user, { cascade: true, onDelete: "CASCADE" })
+    @JoinColumn({ name: "cart_id" })
     cart: Cart;
-}
-
+  }
+  

@@ -15,29 +15,29 @@ import slugify from "slugify";
 
 @Entity({ name: "products" })
 export class Product {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: "id" })
   id: number;
 
-  @Column()
+  @Column({ name: "name", type: "varchar", length: 255 })
   name: string;
 
-  @Column()
+  @Column({ name: "description", type: "text" })
   description: string;
 
-  @Column()
+  @Column({ name: "price", type: "decimal", precision: 10, scale: 2 })
   price: number;
 
-  @Column()
+  @Column({ name: "stock", type: "int" })
   stock: number;
 
-  @Column()
+  @Column({ name: "image", type: "varchar", length: 255 })
   image: string;
 
-  @Column({ name: "categoryid" })
+  @Column({ name: "category_id", type: "int" })
   categoryId: number;
 
-  @ManyToOne(() => Category, (category) => category.products)
-  @JoinColumn({ name: "categoryid" })
+  @ManyToOne(() => Category, (category) => category.products, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "category_id" })
   category: Category;
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.product)
@@ -46,8 +46,9 @@ export class Product {
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.product)
   orderProducts: OrderProduct[];
 
-  @Column()
+  @Column({ name: "slug", type: "varchar", length: 255, unique: true })
   slug: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   generateSlug() {
@@ -58,4 +59,4 @@ export class Product {
       });
     }
   }
-};
+}
