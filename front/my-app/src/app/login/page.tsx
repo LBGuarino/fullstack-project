@@ -3,7 +3,7 @@ import LoginForm from "@/components/LoginForm";
 export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-thin sm:text-3xl md:text-4xl mb-8">
+      <h1 className="text-2xl font-thin sm:text-3xl md:text-4xl mb-7">
         Sign in to your account
       </h1>
 
