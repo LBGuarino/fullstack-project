@@ -69,7 +69,7 @@ export class NewMigration1738166024650 implements MigrationInterface {
         phone VARCHAR(20) NOT NULL,
         address VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
-        pickupPoint INTEGER NULL,
+        pickuppoint INTEGER NULL,
         orderid INTEGER UNIQUE NOT NULL,
         CONSTRAINT fk_orderData_order FOREIGN KEY (orderid) REFERENCES orders(id) ON DELETE CASCADE
       );
