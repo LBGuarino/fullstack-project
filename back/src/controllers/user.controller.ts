@@ -53,20 +53,12 @@ export const getSession = catchedController(async (req: Request, res: Response) 
   try {
     const token = req.cookies?.token;
 
-    if (!token) {
-      return res.status(401).json({ message: "No session found" });
-    }
-
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
     const user = await UserRepository.findOne({
       where: { id: decoded.userId },
       relations: ["orders"],
     });
-
-    if (!user) {
-      return res.status(401).json({ message: "Invalid session" });
-    }
 
     return res.status(200).json({ user });
   } catch (error) {
