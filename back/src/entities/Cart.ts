@@ -14,7 +14,7 @@ import {
     id: number;
   
     @OneToOne(() => User, (user) => user.cart)
-    @JoinColumn({name: "userid"})
+    @JoinColumn({name: "user_id"})
     user: User;
   
     @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { cascade: true })

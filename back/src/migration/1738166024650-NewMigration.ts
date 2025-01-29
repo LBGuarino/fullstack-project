@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class NewMigration1738166024650 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // 1. Crear tablas sin claves foráneas circulares
+    // Crear tabla credentials
     await queryRunner.query(`
       CREATE TABLE credentials (
         id SERIAL PRIMARY KEY,
@@ -10,6 +10,7 @@ export class NewMigration1738166024650 implements MigrationInterface {
       );
     `);
 
+    // Crear tabla users sin la clave foránea fk_user_cart
     await queryRunner.query(`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
@@ -21,10 +22,11 @@ export class NewMigration1738166024650 implements MigrationInterface {
         credential_id INTEGER UNIQUE,
         cart_id INTEGER UNIQUE,
         CONSTRAINT fk_user_credential FOREIGN KEY (credential_id) REFERENCES credentials(id) ON DELETE CASCADE
-        -- Nota: No agregamos fk_user_cart aquí para evitar la dependencia circular
+        -- No se agrega fk_user_cart aquí para evitar la dependencia circular
       );
     `);
 
+    // Crear tabla carts con la clave foránea fk_cart_user
     await queryRunner.query(`
       CREATE TABLE carts (
         id SERIAL PRIMARY KEY,
@@ -33,7 +35,7 @@ export class NewMigration1738166024650 implements MigrationInterface {
       );
     `);
 
-    // 2. Agregar la clave foránea faltante en users para cart_id
+    // Agregar la clave foránea fk_user_cart a la tabla users
     await queryRunner.query(`
       ALTER TABLE users
       ADD CONSTRAINT fk_user_cart FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE;
@@ -109,12 +111,12 @@ export class NewMigration1738166024650 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Eliminar las restricciones de claves foráneas primero
+    // Eliminar la clave foránea fk_user_cart primero
     await queryRunner.query(`
       ALTER TABLE users DROP CONSTRAINT fk_user_cart;
     `);
 
-    // Luego, eliminar las tablas en el orden inverso de creación
+    // Eliminar las tablas en orden inverso
     await queryRunner.query(`
       DROP TABLE order_products;
       DROP TABLE order_data;
