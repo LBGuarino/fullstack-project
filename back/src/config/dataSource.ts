@@ -1,14 +1,7 @@
 import { DataSource } from "typeorm";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER } from "./envs";
-import { User } from "../entities/User";
-import { Credential } from "../entities/Credential";
-import { Order } from "../entities/Order";
-import { Category } from "../entities/Category";
-import { Product } from "../entities/Product";
-import { Cart } from "../entities/Cart";
-import { CartItem } from "../entities/CartItem";
-import { OrderData } from "../entities/OrderData";
-import { OrderProduct } from "../entities/OrderProduct";
+
+const isProd = process.env.NODE_ENV === "production";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -20,7 +13,7 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   // dropSchema: true,
   logging: true,
-  entities: [User, Credential, Order, OrderData, OrderProduct, Product, Category, Cart, CartItem],
+  entities: [isProd ? "dist/entities/*.js" : "src/entities/*.ts"],
+  migrations: [isProd ? "dist/migration/*.js" : "src/migration/*.ts"],
   subscribers: [],
-  migrations: ['src/migration/**/*.ts'],
 });
