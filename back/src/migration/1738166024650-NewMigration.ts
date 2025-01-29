@@ -59,7 +59,7 @@ export class NewMigration1738166024650 implements MigrationInterface {
         status VARCHAR(50) NOT NULL,
         date TIMESTAMP NOT NULL DEFAULT NOW(),
         userid INTEGER NOT NULL,
-        paymentMethodId VARCHAR(255) NOT NULL,
+        paymentmethodid VARCHAR(255) NOT NULL,
         CONSTRAINT fk_order_user FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
       );
 
