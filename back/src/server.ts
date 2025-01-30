@@ -10,6 +10,7 @@ app.use(cors({
   origin: ["https://www.thescentedshop.blog", "https://thescentedshop.blog", "http://localhost:3000"],
   credentials: true,
   exposedHeaders: ["set-cookie"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json());
 app.use(morgan("dev"));

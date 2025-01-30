@@ -8,7 +8,6 @@ import {
   createCredentialService,
 } from "./credential.service";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config/envs";
 import { Cart } from "../entities/Cart";
 import { CartRepository } from "../repositories/cart.repository";
 import { ProductRepository } from "../repositories/product.repository";

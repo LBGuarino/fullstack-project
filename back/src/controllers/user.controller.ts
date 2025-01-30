@@ -42,7 +42,7 @@ export const login = catchedController(async (req: Request, res: Response) => {
     sameSite: isProduction ? 'none' : 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
-    domain: isProduction ? 'https://thescentedshop.blog' : 'http://localhost:3000',
+    domain: isProduction ? '.thescentedshop.blog' : '.localhost:3000',
   })
   res.status(200).send({
     login: true,
