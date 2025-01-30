@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect, useCallback } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthProviderProps, IAuthContextProps } from "./AuthContextProps";
 import { ILoggedUser } from "@/interfaces/ILoggedUser";
@@ -17,51 +17,63 @@ const AuthContext = createContext<IAuthContextProps>({
   getOrders: async () => {},
 });
 
-
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<ILoggedUser | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [orders, setOrders] = useState<IOrder[]>([]);
 
-  const checkSession = async () => {
+  const checkSession = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
         withCredentials: true,
       });
-      const { user } = response.data;
-      setUser(user);
+      
+      if (response.data.user) {
+        setUser(response.data.user);
+        document.cookie = `token=${response.data.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${process.env.NODE_ENV === 'production' ? 'secure; sameSite=none' : ''}`;
+      }
     } catch (error) {
       const err = error as AxiosError;
       if (err.response?.status === 401) {
         setUser(null);
-      } else {
-      setError(err.message || "Unexpected error");
-      console.error("error checking session:", error)}
+        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      }
+      setError(err.message || "Session check failed");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     checkSession();
-  }, []);
+    
+    const interval = setInterval(() => {
+      checkSession();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [checkSession]);
 
   const login = async (userData: ILogin) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/login`, userData,
-        {withCredentials: true}
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
+        userData,
+        { withCredentials: true }
       );
 
-      const { user } = response.data;
-      setUser(user);
+      if (response.data.user) {
+        setUser(response.data.user);
+        document.cookie = `token=${response.data.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${process.env.NODE_ENV === 'production' ? 'secure; sameSite=none' : ''}`;
+      }
     } catch (error) {
       const err = error as AxiosError;
-      setError(err.message || "Unexpected error");
+      setError(err.message || "Login failed");
       setUser(null);
       throw error;
     } finally {
@@ -70,38 +82,44 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/logout`, null, {
-        withCredentials: true,
-    });
-    setUser(null);
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
+        null,
+        { withCredentials: true }
+      );
+    } finally {
+      setUser(null);
+      setOrders([]);
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
+    }
   };
 
-  const getOrders = async () => {
+  const getOrders = useCallback(async () => {
+    if (!user) return;
+    
     try {
       setLoading(true);
-      setError(null);
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/orders`, {
-        withCredentials: true,
-      });
-      const orders = response.data; 
-      setOrders(orders);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/orders`,
+        { withCredentials: true }
+      );
+      setOrders(response.data);
     } catch (error) {
       const err = error as AxiosError;
-      setError(err.message || "Unexpected error");
+      setError(err.message || "Failed to fetch orders");
       setOrders([]);
-      console.error("error getting orders:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
-    if (user) {
-      getOrders();
-    } else {
-      setOrders([]);
-    }
-  }, [user]);
+    getOrders();
+  }, [getOrders, user]);
 
   return (
     <AuthContext.Provider
