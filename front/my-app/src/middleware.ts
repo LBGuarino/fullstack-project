@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
 
-    return NextResponse.next(); // Token válido
+    return NextResponse.next();
   } catch (error) {
     console.error("Error al validar token:", error);
     const loginUrl = new URL("/login", req.url);
