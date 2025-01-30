@@ -66,7 +66,10 @@ export const getSession = catchedController(async (req: Request, res: Response) 
     });
 
     if (!user) {
-      res.clearCookie('token');
+      res.clearCookie('token', {
+        domain: '.thescentedshop.blog',
+        path: '/'
+      });
       return res.status(401).json({ message: "User not found" });
     }
 
@@ -81,7 +84,10 @@ export const getSession = catchedController(async (req: Request, res: Response) 
 
     return res.status(200).json({ user });
   } catch (error) {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+      domain: '.thescentedshop.blog',
+      path: '/'
+    });
     return res.status(401).json({ message: "Invalid or expired session" });
   }
 });

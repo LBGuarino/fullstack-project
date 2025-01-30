@@ -29,12 +29,16 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
         withCredentials: true,
       });
+
+      document.cookie = `token=; domain=.render.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
       
       if (response.data.user) {
         setUser(response.data.user);
-        document.cookie = `token=${response.data.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${process.env.NODE_ENV === 'production' ? 'secure; sameSite=none' : ''}`;
+        document.cookie = `token=${response.data.token}; path=/; max-age=604800; domain=.thescentedshop.blog; secure; samesite=none`;
       }
     } catch (error) {
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = 'token=; path=/; domain=.thescentedshop.blog; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       const err = error as AxiosError;
       if (err.response?.status === 401) {
         setUser(null);
