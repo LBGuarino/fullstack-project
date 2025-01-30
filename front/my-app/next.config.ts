@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
       {
         source: '/api/:path*',
         destination: 'https://fullstack-project-back-mtag.onrender.com/:path*'
+      },
+      {
+        source: "/users/:path*",
+        destination: "https://fullstack-project-back-mtag.onrender.com/users/:path*"
       }
     ]
   },

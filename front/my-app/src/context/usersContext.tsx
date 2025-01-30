@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const checkSession = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
+      const response = await axios.get(`api/users/session`, {
         withCredentials: true,
       });
      
@@ -60,7 +60,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       setError(null);
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
+        `api/users/login`,
         userData,
         { withCredentials: true }
       );
@@ -81,7 +81,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const logout = async () => {
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
+        `api/users/logout`,
         null,
         { withCredentials: true }
       );
@@ -100,7 +100,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/orders`,
+        `api/users/orders`,
         { withCredentials: true }
       );
       setOrders(response.data);

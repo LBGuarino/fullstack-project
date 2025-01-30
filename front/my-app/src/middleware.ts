@@ -12,13 +12,13 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value || "";
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
+    const response = await fetch(`${req.nextUrl.origin}/api/users/session`, {
       headers: {
         Cookie: `token=${token}`,
       },
     });
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       const loginUrl = new URL("/login", req.url);
       return NextResponse.redirect(loginUrl);
     }

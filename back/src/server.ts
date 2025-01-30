@@ -22,9 +22,6 @@ app.use(cors({
   },  
   credentials: true,
   exposedHeaders: ["set-cookie"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  maxAge: 86400
 }));
 app.use(express.json());
 app.use(morgan("dev"));
