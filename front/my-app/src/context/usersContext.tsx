@@ -34,15 +34,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       
       if (response.data.user) {
         setUser(response.data.user);
-        document.cookie = `token=${response.data.token}; path=/; max-age=604800; domain=thescentedshop.blog; secure; samesite=none`;
+        document.cookie = `token=${response.data.token}; path=/; max-age=604800; domain=.fullstack-project-lucia-belen-guarinos-projects.vercel.app; secure; samesite=none`;
       }
     } catch (error) {
       document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-      document.cookie = 'token=; path=/; domain=thescentedshop.blog; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = 'token=; path=/; domain=.fullstack-project-lucia-belen-guarinos-projects.vercel.app; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       const err = error as AxiosError;
       if (err.response?.status === 401) {
         setUser(null);
-        document.cookie = 'token=; path=/; domain=thescentedshop.blog; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        document.cookie = 'token=; path=/; domain=.fullstack-project-lucia-belen-guarinos-projects.vercel.app; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       }
       setError(err.message || "Session check failed");

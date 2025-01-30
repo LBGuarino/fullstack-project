@@ -42,7 +42,7 @@ export const login = catchedController(async (req: Request, res: Response) => {
     sameSite: isProduction ? 'none' : 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
-    domain: isProduction ? 'thescentedshop.blog' : undefined,
+    domain: isProduction ? '.fullstack-project-lucia-belen-guarinos-projects.vercel.app' : undefined,
   })
   res.status(200).send({
     login: true,
@@ -67,7 +67,7 @@ export const getSession = catchedController(async (req: Request, res: Response) 
 
     if (!user) {
       res.clearCookie('token', {
-        domain: 'thescentedshop.blog',
+        domain: '.fullstack-project-lucia-belen-guarinos-projects.vercel.app',
         path: '/'
       });
       return res.status(401).json({ message: "User not found" });
@@ -79,13 +79,13 @@ export const getSession = catchedController(async (req: Request, res: Response) 
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7,
       path: '/',
-      domain: isProduction ? 'thescentedshop.blog' : undefined
+      domain: isProduction ? '.fullstack-project-lucia-belen-guarinos-projects.vercel.app' : undefined
     });
 
     return res.status(200).json({ user });
   } catch (error) {
     res.clearCookie('token', {
-      domain: 'thescentedshop.blog',
+      domain: '.fullstack-project-lucia-belen-guarinos-projects.vercel.app',
       path: '/'
     });
     return res.status(401).json({ message: "Invalid or expired session" });
