@@ -12,7 +12,6 @@ app.use(cors({
     const allowedOrigins = [
       'https://www.thescentedshop.blog',
       'https://thescentedshop.blog',
-      'https://fullstack-project-lucia-belen-guarinos-projects.vercel.app',
       'http://localhost:3000'
     ];
     if (!origin || allowedOrigins.includes(origin)) {

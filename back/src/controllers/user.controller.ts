@@ -36,7 +36,6 @@ export const registerUser = catchedController(
 export const login = catchedController(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await loginUserService({ email, password });
-  console.log('Setting cookie for domain:', isProduction ? '.thescentedshop.blog' : 'localhost');
   res.cookie('token', user.token, {
     httpOnly: true,
     secure: true,

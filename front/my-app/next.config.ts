@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://fullstack-project-back-mtag.onrender.com/:path*'
+      }
+    ]
+  }
 };
 
 export default nextConfig;
