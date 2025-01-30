@@ -48,7 +48,10 @@ export async function fetchProductsData({ params }: { params: { category: string
   const { category } = await params;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/categories/${category}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/categories/${category}`, {
+      method: "GET",
+      credentials: "include",
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch products for category: ${category}`);
     }

@@ -39,8 +39,8 @@ export const login = catchedController(async (req: Request, res: Response) => {
   console.log('Setting cookie for domain:', isProduction ? '.thescentedshop.blog' : 'localhost');
   res.cookie('token', user.token, {
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
+    secure: true,
+    sameSite: 'none',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
     domain: isProduction ? '.thescentedshop.blog' : undefined,
@@ -79,7 +79,7 @@ export const getSession = catchedController(async (req: Request, res: Response) 
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: isProduction,
+      secure: true,
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24 * 7,
       path: '/',

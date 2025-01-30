@@ -7,7 +7,19 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-  origin: ['https://www.thescentedshop.blog', 'https://thescentedshop.blog', 'https://fullstack-project-lucia-belen-guarinos-projects.vercel.app' ,'http://localhost:3000'],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://www.thescentedshop.blog',
+      'https://thescentedshop.blog',
+      'https://fullstack-project-lucia-belen-guarinos-projects.vercel.app',
+      'http://localhost:3000'
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },  
   credentials: true,
   exposedHeaders: ["set-cookie"],
   allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
