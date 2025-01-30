@@ -29,21 +29,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
         withCredentials: true,
       });
-
-      document.cookie = `token=; domain=.render.com; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-      
+     
       if (response.data.user) {
         setUser(response.data.user);
-        document.cookie = `token=${response.data.token}; path=/; max-age=604800; domain=.fullstack-project-lucia-belen-guarinos-projects.vercel.app; secure; samesite=none`;
       }
     } catch (error) {
-      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-      document.cookie = 'token=; path=/; domain=.fullstack-project-lucia-belen-guarinos-projects.vercel.app; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       const err = error as AxiosError;
       if (err.response?.status === 401) {
         setUser(null);
-        document.cookie = 'token=; path=/; domain=.fullstack-project-lucia-belen-guarinos-projects.vercel.app; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       }
       setError(err.message || "Session check failed");
     } finally {
@@ -74,7 +67,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
       if (response.data.user) {
         setUser(response.data.user);
-        document.cookie = `token=${response.data.token}; path=/; max-age=${60 * 60 * 24 * 7}; ${process.env.NODE_ENV === 'production' ? 'secure; sameSite=none' : ''}`;
       }
     } catch (error) {
       const err = error as AxiosError;
@@ -96,7 +88,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setUser(null);
       setOrders([]);
-      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       if (typeof window !== 'undefined') {
         window.location.reload();
       }
