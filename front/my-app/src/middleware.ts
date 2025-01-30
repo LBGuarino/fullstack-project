@@ -9,10 +9,12 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  const token = req.cookies.get("token")?.value || "";
+
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/session`, {
       headers: {
-        Cookie: req.headers.get("cookie") || "", // Pasa las cookies al backend
+        Cookie: `token=${token}`,
       },
     });
 
