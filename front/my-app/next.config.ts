@@ -11,14 +11,19 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://fullstack-project-back-mtag.onrender.com/:path*'
+        destination: 'https://fullstack-project-back-mtag.onrender.com/api/:path*'
       },
       {
         source: "/users/:path*",
         destination: "https://fullstack-project-back-mtag.onrender.com/users/:path*"
+      },
+      // Nueva regla para categorías
+      {
+        source: "/products/:path*",
+        destination: "https://fullstack-project-back-mtag.onrender.com/products/:path*"
       }
     ]
-  },
+  }
 };
 
 export default nextConfig;

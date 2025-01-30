@@ -18,11 +18,13 @@ export async function middleware(req: NextRequest) {
       },
     });
 
-    if (!response.ok) {
-      const loginUrl = new URL("/login", req.url);
-      return NextResponse.redirect(loginUrl);
+    const newCookies = response.headers.get('set-cookie');
+    if (newCookies) {
+      const res = NextResponse.next();
+      res.headers.set('set-cookie', newCookies);
+      return res;
     }
-
+    
     return NextResponse.next();
   } catch (error) {
     console.error("Error al validar token:", error);

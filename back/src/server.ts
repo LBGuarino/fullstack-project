@@ -8,21 +8,17 @@ const app = express();
 
 app.set("trust proxy", 1);
 app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'https://www.thescentedshop.blog',
-      'https://thescentedshop.blog',
-      'http://localhost:3000'
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },  
+  origin: [
+    'https://www.thescentedshop.blog', // Subdominio principal
+    'https://thescentedshop.blog', // Dominio raíz
+    'http://localhost:3000'
+  ],
   credentials: true,
   exposedHeaders: ["set-cookie"],
-}));
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  maxAge: 86400,
+}));  
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser());
