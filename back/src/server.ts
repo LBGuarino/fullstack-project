@@ -7,10 +7,11 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-  origin: ["https://www.thescentedshop.blog", "https://thescentedshop.blog", "http://localhost:3000"],
+  origin: ['https://www.thescentedshop.blog', 'https://thescentedshop.blog', 'http://localhost:3000'],
   credentials: true,
   exposedHeaders: ["set-cookie"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 app.use(express.json());
 app.use(morgan("dev"));

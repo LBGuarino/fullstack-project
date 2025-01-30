@@ -42,7 +42,7 @@ export const login = catchedController(async (req: Request, res: Response) => {
     sameSite: isProduction ? 'none' : 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
-    domain: isProduction ? '.thescentedshop.blog' : '.localhost:3000',
+    domain: isProduction ? '.thescentedshop.blog' : undefined,
   })
   res.status(200).send({
     login: true,
@@ -54,15 +54,34 @@ export const getSession = catchedController(async (req: Request, res: Response) 
   try {
     const token = req.cookies?.token;
 
+    if (!token) {
+      return res.status(401).json({ message: "No session" });
+    }
+
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
     const user = await UserRepository.findOne({
       where: { id: decoded.userId },
-      relations: ["orders"],
+      relations: ["orders", "cart"],
+    });
+
+    if (!user) {
+      res.clearCookie('token');
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      path: '/',
+      domain: isProduction ? '.thescentedshop.blog' : undefined
     });
 
     return res.status(200).json({ user });
   } catch (error) {
+    res.clearCookie('token');
     return res.status(401).json({ message: "Invalid or expired session" });
   }
 });

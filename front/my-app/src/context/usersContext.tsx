@@ -38,6 +38,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const err = error as AxiosError;
       if (err.response?.status === 401) {
         setUser(null);
+        document.cookie = 'token=; path=/; domain=.thescentedshop.blog; expires=Thu, 01 Jan 1970 00:00:00 GMT';
         document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
       }
       setError(err.message || "Session check failed");
