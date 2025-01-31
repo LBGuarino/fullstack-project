@@ -2,6 +2,7 @@
 
 import { useState, useContext, ReactNode, useEffect, createContext } from "react";
 import axios, { AxiosError } from "axios";
+import { useAuth } from "./usersContext";
 
 export interface ProductDetails {
     id: number;
@@ -35,31 +36,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const { logout } = useAuth();
+
     const fetchCart = async () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`api/users/cart`, {
-                withCredentials: true,
-            });
-
-            const items = response.data.items.map((item: CartItem) => ({
-                product: item.product,
-                quantity: item.quantity,
-            }));
-            setProductsInCart(items);
+          const response = await axios.get("/api/users/cart", { withCredentials: true });
+      
+          if (response.status === 401) {
+            logout();
+            return;
+          }
+      
+          setProductsInCart(response.data.items.map((item: CartItem) => ({
+            product: item.product,
+            quantity: item.quantity,
+          })));
         } catch (error) {
-            const err = error as AxiosError;
-            if (err.response?.status === 400) {
-                setProductsInCart([]);
-            } else {
-            setError(err.message || "Unexpected error");
-            console.error(err)}
+          console.error("Error fetching cart:", error);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
-
+      };
     useEffect(() => {
         fetchCart();
     }, []);
@@ -68,7 +67,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         setError(null);
         try {
-            const permission = await axios.get(`api/users/cart`, {
+            const permission = await axios.get(`/api/users/cart`, {
                 withCredentials: true,
             });
             if (permission.status === 401) {
@@ -82,7 +81,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
         try {
             await axios.post(
-                `api/users/cart`,
+                `/api/users/cart`,
                 { productId: product.product.id, quantity: product.quantity },
                 { withCredentials: true }
             );
@@ -99,7 +98,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setLoading(true);
         setError(null);
         try {
-            await axios.delete(`api/users/cart/${productId}`, {
+            await axios.delete(`/api/users/cart/${productId}`, {
                 withCredentials: true,
             });
             await fetchCart();
@@ -116,7 +115,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setError(null);
         try {
             await axios.patch(
-                `api/users/cart/${product.product.id}`,
+                `/api/users/cart/${product.product.id}`,
                 { quantity: product.quantity },
                 { withCredentials: true }
             );
@@ -134,7 +133,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setError(null);
         try {
             setProductsInCart([]);
-            await axios.delete(`api/users/cart`, {
+            await axios.delete(`/api/users/cart`, {
                 withCredentials: true,
             });
         } catch (err) {

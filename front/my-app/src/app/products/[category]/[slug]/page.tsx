@@ -13,7 +13,7 @@ interface ProductPageParams {
 export default async function ProductPage({ params }: ProductPageParams) {
   const { category, slug } = params;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/categories/${category}/${slug}`);
+  const response = await fetch(`/api/products/categories/${category}/${slug}`);
   if (!response.ok) {
     throw new Error(`Failed to fetch product: ${response.statusText}`);
   }

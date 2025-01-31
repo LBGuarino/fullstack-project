@@ -5,7 +5,6 @@ const protectedRoutes = ["/profile", "/dashboard", "/orders", "/shopping-bag"];
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Permitir acceso público a rutas no protegidas
   if (!protectedRoutes.some(route => pathname.startsWith(route))) {
     return NextResponse.next();
   }
@@ -13,15 +12,14 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value || "";
 
   try {
-    // Verificar sesión usando el proxy
     const response = await fetch(`${req.nextUrl.origin}/api/users/session`, {
       headers: {
         Cookie: `token=${token}`,
       },
+      credentials: 'include',
       cache: 'no-store'
     });
 
-    // Actualizar cookies si es necesario
     const newCookies = response.headers.get('set-cookie');
     const responseToSend = newCookies 
       ? NextResponse.next() 
@@ -31,7 +29,6 @@ export async function middleware(req: NextRequest) {
       responseToSend.headers.set('set-cookie', newCookies);
     }
 
-    // Redirigir si no está autenticado
     if (!response.ok) {
       const loginUrl = new URL("/login", req.url);
       return NextResponse.redirect(loginUrl);

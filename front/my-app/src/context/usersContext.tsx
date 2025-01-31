@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const checkSession = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`api/users/session`, {
+      const response = await axios.get(`/api/users/session`, {
         withCredentials: true,
       });
      
@@ -60,7 +60,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       setError(null);
 
       const response = await axios.post(
-        `api/users/login`,
+        `/api/users/login`,
         userData,
         { withCredentials: true }
       );
@@ -80,17 +80,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await axios.post(
-        `api/users/logout`,
-        null,
-        { withCredentials: true }
-      );
+      await axios.post("/api/users/logout", null, { withCredentials: true });
     } finally {
       setUser(null);
-      setOrders([]);
-      if (typeof window !== 'undefined') {
-        window.location.reload();
-      }
+      window.location.href = "/login"; // ✅ Se maneja solo aquí
     }
   };
 
@@ -100,7 +93,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `api/users/orders`,
+        `/api/users/orders`,
         { withCredentials: true }
       );
       setOrders(response.data);

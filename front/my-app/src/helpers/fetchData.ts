@@ -38,18 +38,13 @@ export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
   try {
     const baseURL = isServer ? BACKEND_URL : "/api"; // Usa proxy en el cliente
 
-    console.log("Fetching from:", `${baseURL}/products/categories`);
-
     const categoriesResponse = await fetch(`${baseURL}/products/categories`);
-    const clonedResponse = categoriesResponse.clone();
-    console.log("Raw response:", await clonedResponse.text());
 
     await validateResponse(categoriesResponse, `${baseURL}/products/categories`);
     
     const categoriesData: ICategory[] = await categoriesResponse.json();
     const validCategories = categoriesData.map(({ name, id }) => ({ name, id }));
 
-    // Fetch products
     const productsResponse = await fetch(`${baseURL}/products`);
     await validateResponse(productsResponse, `${baseURL}/products`);
 
