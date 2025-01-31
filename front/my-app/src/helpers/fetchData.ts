@@ -7,108 +7,94 @@ export interface CategoryPageProps {
   category: string;
 }
 
-// Validar variable de entorno
-const getApiUrl = (): string => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (!apiUrl) {
-    throw new Error("NEXT_PUBLIC_API_URL no está definido en las variables de entorno");
-  }
-  return apiUrl;
+const API_BASE_PATH = process.env.NEXT_PUBLIC_API_URL || '';
+
+const handleApiError = (error: unknown, context: string) => {
+  console.error(`Error in ${context}:`, error);
+  throw new Error(typeof error === 'string' ? error : 'Failed to fetch data');
 };
 
-export async function fetchDropdownData(): Promise<DropdownMenuProps> {
-  const API_URL = getApiUrl();
-  
+const validateResponse = async (response: Response, endpoint: string) => {
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(
+      `API Error: ${endpoint} - ${response.status} ${response.statusText} - ${errorData.message || 'Unknown error'}`
+    );
+  }
+  return response;
+};
+
+export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
   try {
-    // Obtener categorías
-    const categoriesUrl = new URL('/api/products/categories', API_URL).toString();
-    const categoriesRes = await fetch(categoriesUrl);
+    // Fetch categories
+    const categoriesResponse = await fetch(
+      new URL('/api/products/categories', API_BASE_PATH).toString()
+    );
+    await validateResponse(categoriesResponse, '/products/categories');
     
-    if (!categoriesRes.ok) {
-      throw new Error(`Error ${categoriesRes.status}: ${categoriesRes.statusText}`);
-    }
-    
-    const categoriesData: ICategory[] = await categoriesRes.json();
-    
-    // Validar estructura de categorías
-    const categories = categoriesData.map(({ name, id }) => {
-      if (!name || !id) {
-        throw new Error("Estructura de categoría inválida");
-      }
+    const categoriesData: ICategory[] = await categoriesResponse.json();
+    const validCategories = categoriesData.map(({ name, id }) => {
+      if (!name || !id) throw new Error("Invalid category structure");
       return { name, id };
     });
 
-    // Obtener productos populares
-    const productsUrl = new URL('/api/products', API_URL).toString();
-    const productsRes = await fetch(productsUrl);
+    // Fetch products
+    const productsResponse = await fetch(
+      new URL('/api/products', API_BASE_PATH).toString()
+    );
+    await validateResponse(productsResponse, '/products');
     
-    if (!productsRes.ok) {
-      throw new Error(`Error ${productsRes.status}: ${productsRes.statusText}`);
-    }
-    
-    const allProducts: IProduct[] = await productsRes.json();
-
-    // Validar y mapear productos
-    const popularProducts = allProducts.map(({ 
-      name, 
-      id, 
-      image, 
-      category 
-    }) => {
+    const productsData: IProduct[] = await productsResponse.json();
+    const validProducts = productsData.map(({ name, id, image, category }) => {
       if (!name || !id || !image || !category) {
-        throw new Error("Estructura de producto inválida");
+        throw new Error("Invalid product structure");
       }
       return {
         name,
         id,
         image,
-        category: {
-          id: category.id,
-          name: category.name
-        }
+        category: { id: category.id, name: category.name }
       };
     });
 
     return {
-      categories,
-      popularProducts,
+      categories: validCategories,
+      popularProducts: validProducts,
     };
-    
+
   } catch (error) {
-    console.error("Error fetching dropdown data:", error);
-    throw new Error("No se pudieron cargar los datos. Intente recargar la página.");
+    return handleApiError(error, 'fetchDropdownData');
   }
-}
+};
 
-export async function fetchProductsData({ params }: { params: { category: string } }) {
-  const API_URL = getApiUrl();
-  const { category } = params;
-
+export const fetchProductsData = async ({ 
+  params 
+}: { 
+  params: { category: string } 
+}) => {
   try {
-    const url = new URL(`/api/products/categories/${category}`, API_URL).toString();
+    const url = new URL(
+      `/api/products/categories/${params.category}`, 
+      API_BASE_PATH
+    ).toString();
+
     const response = await fetch(url);
+    await validateResponse(response, `/products/categories/${params.category}`);
     
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-
     const products: IProduct[] = await response.json();
-
-    // Validar productos
     const validProducts = products.map(product => {
       if (!product.id || !product.name || !product.category) {
-        throw new Error("Producto con estructura inválida");
+        throw new Error("Invalid product structure");
       }
       return product;
     });
 
     return {
       products: validProducts,
-      category,
+      category: params.category,
     };
-    
+
   } catch (error) {
-    console.error("Error fetching products:", error);
-    throw new Error(`Error al cargar productos de ${category}`);
+    return handleApiError(error, 'fetchProductsData');
   }
-}
+};
