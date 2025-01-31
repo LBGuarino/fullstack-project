@@ -28,9 +28,10 @@ export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
   try {
     // Fetch categories
     const categoriesResponse = await fetch(
-      new URL('/api/products/categories', API_BASE_PATH).toString()
+      `${API_BASE_PATH}/products/categories`
     );
-    await validateResponse(categoriesResponse, '/products/categories');
+    await validateResponse(categoriesResponse,`${API_BASE_PATH}/products/categories`
+    );
     
     const categoriesData: ICategory[] = await categoriesResponse.json();
     const validCategories = categoriesData.map(({ name, id }) => {
@@ -40,7 +41,7 @@ export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
 
     // Fetch products
     const productsResponse = await fetch(
-      new URL('/api/products', API_BASE_PATH).toString()
+      `${API_BASE_PATH}/products/categories`
     );
     await validateResponse(productsResponse, '/products');
     
@@ -73,13 +74,9 @@ export const fetchProductsData = async ({
   params: { category: string } 
 }) => {
   try {
-    const url = new URL(
-      `/api/products/categories/${params.category}`, 
-      API_BASE_PATH
-    ).toString();
-
-    const response = await fetch(url);
-    await validateResponse(response, `/products/categories/${params.category}`);
+    const response = await fetch(`${API_BASE_PATH}/products/categories/${params.category}`
+    );
+    await validateResponse(response, `${API_BASE_PATH}/products/categories/${params.category}`);
     
     const products: IProduct[] = await response.json();
     const validProducts = products.map(product => {

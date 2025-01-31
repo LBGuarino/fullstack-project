@@ -74,13 +74,4 @@ const nextConfig: NextConfig = {
   }
 };
 
-// Configuración de debug solo en desarrollo
-if (process.env.NODE_ENV === 'development') {
-  nextConfig.rewrites = async () => {
-    const originalRewrites = await (nextConfig.rewrites?.() || []);
-    console.log('Configured API Rewrites:', originalRewrites);
-    return originalRewrites;
-  };
-}
-
 export default nextConfig;
