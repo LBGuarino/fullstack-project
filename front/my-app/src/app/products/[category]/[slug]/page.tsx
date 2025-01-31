@@ -16,9 +16,9 @@ interface ProductPageParams {
 export default async function ProductPage({ params }: ProductPageParams) {
   const { category, slug } = params;
 
-  const baseURL = isServer ? BACKEND_URL : "";
+  const API_BASE_URL = isServer ? BACKEND_URL : "/api";
 
-  const response = await fetch(`${baseURL}/api/products/categories/${category}/${slug}`, {
+  const response = await fetch(`${API_BASE_URL}/products/categories/${category}/${slug}`, {
     credentials: 'include'
   });
   if (!response.ok) {
