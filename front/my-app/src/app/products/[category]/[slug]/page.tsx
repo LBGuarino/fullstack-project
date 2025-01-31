@@ -3,6 +3,9 @@ import { IProduct } from '@/interfaces/IProduct';
 import { Breadcrumbs } from '@mui/material';
 import Link from 'next/link';
 
+const BACKEND_URL = "https://fullstack-project-back-mtag.onrender.com"; 
+const isServer = typeof window === "undefined"; 
+
 interface ProductPageParams {
   params : {
     category: string;
@@ -13,7 +16,11 @@ interface ProductPageParams {
 export default async function ProductPage({ params }: ProductPageParams) {
   const { category, slug } = params;
 
-  const response = await fetch(`/api/products/categories/${category}/${slug}`);
+  const baseURL = isServer ? BACKEND_URL : "";
+
+  const response = await fetch(`${baseURL}/api/products/categories/${category}/${slug}`, {
+    credentials: 'include'
+  });
   if (!response.ok) {
     throw new Error(`Failed to fetch product: ${response.statusText}`);
   }
