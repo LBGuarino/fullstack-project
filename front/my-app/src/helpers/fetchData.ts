@@ -1,3 +1,4 @@
+'use client';
 import { DropdownMenuProps } from "@/components/DropdownMenu";
 import { ICategory } from "@/interfaces/ICategory";
 import { IProduct } from "@/interfaces/IProduct";
@@ -32,11 +33,11 @@ const validateResponse = async (response: Response, endpoint: string) => {
 };
 
 const BACKEND_URL = 'https://fullstack-project-back-mtag.onrender.com';
-const isServer = typeof window === "undefined"; // True si está en el servidor
+const isServer = typeof window === "undefined";
 
 export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
   try {
-    const baseURL = isServer ? BACKEND_URL : "/api"; // Usa proxy en el cliente
+    const baseURL = isServer ? BACKEND_URL : "/api";
 
     const categoriesResponse = await fetch(`${baseURL}/products/categories`);
 
