@@ -1,4 +1,3 @@
-'use client';
 import { DropdownMenuProps } from "@/components/DropdownMenu";
 import { ICategory } from "@/interfaces/ICategory";
 import { IProduct } from "@/interfaces/IProduct";
@@ -34,20 +33,19 @@ const validateResponse = async (response: Response, endpoint: string) => {
 
 const BACKEND_URL = 'https://fullstack-project-back-mtag.onrender.com';
 const isServer = typeof window === "undefined";
+const API_BASE_URL = isServer ? BACKEND_URL : "/api";
 
 export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
   try {
-    const baseURL = isServer ? BACKEND_URL : "/api";
+    const categoriesResponse = await fetch(`${API_BASE_URL}/products/categories`);
 
-    const categoriesResponse = await fetch(`${baseURL}/products/categories`);
-
-    await validateResponse(categoriesResponse, `${baseURL}/products/categories`);
+    await validateResponse(categoriesResponse, `${API_BASE_URL}/products/categories`);
     
     const categoriesData: ICategory[] = await categoriesResponse.json();
     const validCategories = categoriesData.map(({ name, id }) => ({ name, id }));
 
-    const productsResponse = await fetch(`${baseURL}/products`);
-    await validateResponse(productsResponse, `${baseURL}/products`);
+    const productsResponse = await fetch(`${API_BASE_URL}/products`);
+    await validateResponse(productsResponse, `${API_BASE_URL}/products`);
 
     const productsData: IProduct[] = await productsResponse.json();
     const validProducts = productsData.map(({ name, id, image, category }) => ({
@@ -70,9 +68,9 @@ export const fetchProductsData = async ({
   params: { category: string } 
 }) => {
   try {
-    const response = await fetch(`/api/products/categories/${params.category}`
+    const response = await fetch(`${API_BASE_URL}/products/categories/${params.category}`
     );
-    await validateResponse(response, `/api/products/categories/${params.category}`);
+    await validateResponse(response, `${API_BASE_URL}/products/categories/${params.category}`);
     
     const products: IProduct[] = await response.json();
     const validProducts = products.map(product => {
