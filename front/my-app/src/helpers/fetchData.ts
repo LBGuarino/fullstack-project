@@ -7,8 +7,6 @@ export interface CategoryPageProps {
   category: string;
 }
 
-const API_BASE_PATH = process.env.NEXT_PUBLIC_API_URL || '';
-
 const handleApiError = (error: unknown, context: string) => {
   console.error(`Error in ${context}:`, error);
   throw new Error(typeof error === 'string' ? error : 'Failed to fetch data');
@@ -16,7 +14,16 @@ const handleApiError = (error: unknown, context: string) => {
 
 const validateResponse = async (response: Response, endpoint: string) => {
   if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
+    const clonedResponse = response.clone();
+    const contentType = clonedResponse.headers.get("content-type");
+
+    if (!contentType || !contentType.includes("application/json")) {
+      const errorText = await clonedResponse.text();
+      console.error(`API Error (not JSON) at ${endpoint}:`, errorText);
+      throw new Error(`API Error at ${endpoint}: Server returned non-JSON response`);
+    }
+
+    const errorData = await clonedResponse.json();
     throw new Error(
       `API Error: ${endpoint} - ${response.status} ${response.statusText} - ${errorData.message || 'Unknown error'}`
     );
@@ -24,39 +31,32 @@ const validateResponse = async (response: Response, endpoint: string) => {
   return response;
 };
 
+const BACKEND_URL = 'https://fullstack-project-back-mtag.onrender.com';
+const isServer = typeof window === "undefined"; // True si está en el servidor
+
 export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
   try {
-    // Fetch categories
-    const categoriesResponse = await fetch(
-      `${API_BASE_PATH}/products/categories`
-    );
-    await validateResponse(categoriesResponse,`${API_BASE_PATH}/products/categories`
-    );
+    const baseURL = isServer ? BACKEND_URL : "/api"; // Usa proxy en el cliente
+
+    console.log("Fetching from:", `${baseURL}/products/categories`);
+
+    const categoriesResponse = await fetch(`${baseURL}/products/categories`);
+    const clonedResponse = categoriesResponse.clone();
+    console.log("Raw response:", await clonedResponse.text());
+
+    await validateResponse(categoriesResponse, `${baseURL}/products/categories`);
     
     const categoriesData: ICategory[] = await categoriesResponse.json();
-    const validCategories = categoriesData.map(({ name, id }) => {
-      if (!name || !id) throw new Error("Invalid category structure");
-      return { name, id };
-    });
+    const validCategories = categoriesData.map(({ name, id }) => ({ name, id }));
 
     // Fetch products
-    const productsResponse = await fetch(
-      `${API_BASE_PATH}/products/categories`
-    );
-    await validateResponse(productsResponse, '/products');
-    
+    const productsResponse = await fetch(`${baseURL}/products`);
+    await validateResponse(productsResponse, `${baseURL}/products`);
+
     const productsData: IProduct[] = await productsResponse.json();
-    const validProducts = productsData.map(({ name, id, image, category }) => {
-      if (!name || !id || !image || !category) {
-        throw new Error("Invalid product structure");
-      }
-      return {
-        name,
-        id,
-        image,
-        category: { id: category.id, name: category.name }
-      };
-    });
+    const validProducts = productsData.map(({ name, id, image, category }) => ({
+      name, id, image, category: { id: category.id, name: category.name }
+    }));
 
     return {
       categories: validCategories,
@@ -64,7 +64,7 @@ export const fetchDropdownData = async (): Promise<DropdownMenuProps> => {
     };
 
   } catch (error) {
-    return handleApiError(error, 'fetchDropdownData');
+    return handleApiError(error, "fetchDropdownData");
   }
 };
 
@@ -74,9 +74,9 @@ export const fetchProductsData = async ({
   params: { category: string } 
 }) => {
   try {
-    const response = await fetch(`${API_BASE_PATH}/products/categories/${params.category}`
+    const response = await fetch(`/api/products/categories/${params.category}`
     );
-    await validateResponse(response, `${API_BASE_PATH}/products/categories/${params.category}`);
+    await validateResponse(response, `/api/products/categories/${params.category}`);
     
     const products: IProduct[] = await response.json();
     const validProducts = products.map(product => {
