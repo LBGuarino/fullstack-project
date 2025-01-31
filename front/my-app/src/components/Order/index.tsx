@@ -11,6 +11,10 @@ import { OrderFormInputs, orderFormSchema } from "@/validations/orderFormSchema"
 import { PaymentMethodData } from "./types";
 import { CartItem, useCartContext } from "@/context/CartContext";
 import { useAuth } from "@/context/usersContext";
+
+const BACKEND_URL = "https://fullstack-project-back-mtag.onrender.com"; 
+const isServer = typeof window === "undefined"; 
+
 export interface OrderProps {
     products: CartItem[];
     totalAmount: number;
@@ -55,8 +59,10 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
         if (!orderData || !stripe) return;
 
         try {
+            const API_BASE_URL = isServer ? BACKEND_URL : "/api";
+
             const response = await axios.post<{ client_secret: string; status: string; next_action?: { type: string } }>(
-                `${process.env.NEXT_PUBLIC_API_URL}/payment/create-payment-intent`,
+                `${API_BASE_URL}/payment/create-payment-intent`,
                 {
                     paymentMethodId,
                     amount: totalAmount * 100,
@@ -67,7 +73,7 @@ const Order: React.FC<OrderProps> = ({ products, totalAmount }) => {
 
             if (status === "requires_action" && next_action?.type === "use_stripe_sdk") {
             } else if (status === "requires_confirmation" || status === "succeeded") {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+                await axios.post(`${API_BASE_URL}/orders`, {
                     userId: user?.id,
                     paymentMethodId,
                     products: productsWQuantity,
