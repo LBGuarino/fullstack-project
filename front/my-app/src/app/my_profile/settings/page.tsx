@@ -67,8 +67,11 @@ export default function Settings() {
     const onSubmit = async (data: ModifyFormInputs) => {
         try {
         await axios.put(`/api/users/profile`, data);
-        } catch (error) {
-            throw new AxiosError("Error updating profile");
+        } catch (error: unknown) {
+            if (error instanceof AxiosError) {
+                throw new Error(error.message);
+            }
+            throw error;
         }
         setSuccess("Settings updated successfully!");
         setIsEditing({
