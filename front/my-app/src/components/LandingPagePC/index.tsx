@@ -3,6 +3,7 @@ import { useCartContext } from "@/context/CartContext";
 import Image from "next/image";
 import ProductCounter from "../ProductCounter";
 import { useState } from "react";
+import Link from "next/link";
 
 export interface LandingPagePCProps {
     id: number;
@@ -10,6 +11,7 @@ export interface LandingPagePCProps {
     price: number;
     image: string;
     description: string;
+    category: string;
   }
   
   export const LandingPagePC: React.FC<LandingPagePCProps> = ({
@@ -18,6 +20,7 @@ export interface LandingPagePCProps {
     price,
     image,
     description,
+    category
   }) => {
     const { addToCart } = useCartContext();
     const [quantity, setQuantity] = useState<number>(1);
@@ -29,11 +32,15 @@ export interface LandingPagePCProps {
     return (
       <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
         <div className="h-full w-full align-middle flex justify-center">
+          <Link href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}>
           <Image src={image} alt={name} width={400} height={400} className="h-1/2 w-1/2 object-cover" />
+          </Link>
         </div>
   
         <div className="p-4 flex flex-col gap-2">
-          <h3 className="text-lg font-semibold text-gray-800 truncate">{name}</h3>
+          <h3 className="text-lg font-semibold text-gray-800 truncate">
+            {name}
+          </h3>
           <p className="text-xl font-bold text-cyan-600">${price.toFixed(2)}</p>
           <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
           <div className="flex items-center mt-2">

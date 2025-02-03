@@ -5,10 +5,10 @@ import Image from "next/image";
 export const ShoppingCartPC: React.FC<{ item: CartItem }> = ({
     item: { product: { name, price, image, id }, quantity }
   }) => {
-    const { removeFromCart } = useCartContext();
+    const { updateQuantity } = useCartContext();
     
     const handleRemoveFromCart = () => {
-        removeFromCart(id);
+        updateQuantity(id, quantity - 1);
     };
 
     return (

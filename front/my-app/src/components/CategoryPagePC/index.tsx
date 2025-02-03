@@ -4,6 +4,7 @@ import Image from "next/image";
 import ProductCounter from "../ProductCounter";
 import { useState } from "react";
 import AnimatedPage from "../AnimatedPage";
+import Link from "next/link";
 
 export interface CategoryPagePCProps {
   id: number;
@@ -11,6 +12,7 @@ export interface CategoryPagePCProps {
   price: number;
   image: string;
   description: string;
+  category: string;
 }
 
 export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
@@ -19,6 +21,7 @@ export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
   price,
   image,
   description,
+  category,
 }) => {
   const { addToCart } = useCartContext();
   const [quantity, setQuantity] = useState<number>(1);
@@ -31,6 +34,7 @@ export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
     <AnimatedPage>
     <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 overflow-hidden flex flex-col">
       <div className="h-48 sm:h-60 md:h-72 lg:h-80 flex justify-center items-center">
+        <Link href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}>
         <Image
           src={image}
           alt={name}
@@ -38,6 +42,7 @@ export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
           height={300}
           className="h-full w-auto object-contain"
         />
+        </Link>
       </div>
 
       <div className="p-4 flex flex-col gap-4 flex-1">

@@ -1,11 +1,25 @@
 import type { NextConfig } from "next";
+import { ImageConfig } from "next/dist/shared/lib/image-config";
 
 const BACKEND_URL = 'https://fullstack-project-back-mtag.onrender.com';
-const IMAGE_DOMAINS = ['cms-images.mmst.eu', 'assets.mmsrg.com'];
+const RemotePatterns: ImageConfig['remotePatterns'] = [
+  {
+    protocol: 'https',
+    hostname: 'cms-images.mmst.eu',
+    port: '',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'assets.mmsrg.com',
+    port: '',
+    pathname: '/**',
+  },
+];
 
 const nextConfig: NextConfig = {
   images: {
-    domains: IMAGE_DOMAINS,
+    remotePatterns: RemotePatterns,
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 86400, // 24 horas
   },

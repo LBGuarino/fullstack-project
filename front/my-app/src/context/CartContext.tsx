@@ -22,7 +22,7 @@ export interface CartContextValue {
     productsInCart: CartItem[];
     addToCart: (product: CartItem) => Promise<void>;
     removeFromCart: (productId: number) => Promise<void>;
-    updateQuantity: (product: CartItem) => Promise<void>;
+    updateQuantity: (productId: number, quantity: number) => Promise<void>;
     clearCart: () => Promise<void>;
     fetchCart: () => Promise<void>;
     loading: boolean;
@@ -110,13 +110,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const updateQuantity = async (product: CartItem) => {
+    const updateQuantity = async (productId: number, quantity: number) => {
         setLoading(true);
         setError(null);
         try {
             await axios.patch(
-                `/api/users/cart/${product.product.id}`,
-                { quantity: product.quantity },
+                `/api/users/cart/${productId}`,
+                { quantity },
                 { withCredentials: true }
             );
             await fetchCart();

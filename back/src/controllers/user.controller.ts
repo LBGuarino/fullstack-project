@@ -33,6 +33,16 @@ export const registerUser = catchedController(
   }
 );
 
+export const updateProfile = catchedController(async (req: Request, res: Response) => {
+  const { name, address, phone, email } = req.body;
+  const user = await UserRepository.findOne({
+    where: { id: req.user?.id },
+  });
+  if (!user) throw new ClientError("User not found");
+  await UserRepository.update(user, { name, address, phone, email });
+  res.status(200).send(user);
+});
+
 export const login = catchedController(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await loginUserService({ email, password });

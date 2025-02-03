@@ -20,7 +20,7 @@ export default function LandingPage() {
   return (
     <div className="max-w-screen-xl mx-auto p-8"> 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {products.map(({ id, name, price, image, description }) => (
+      {products.map(({ id, name, price, image, description, category }) => (
         <CategoryPagePC
           key={id}
           id={id}
@@ -28,6 +28,7 @@ export default function LandingPage() {
           price={price}
           image={image}
           description={description}
+          category={category.name}
         />
       ))}
     </div>

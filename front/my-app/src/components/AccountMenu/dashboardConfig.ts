@@ -20,12 +20,8 @@ export const dashboardConfig: DashboardConfig[] = [
     {
         id: 2,
         name: "My Profile",
+        path: "/my_profile/settings",
         subTitles: [
-            {
-                id: 1,
-                name: "Addresses",
-                path: "/my_profile/addresses"
-            },
             {
                 id: 2,
                 name: "Profile Settings",

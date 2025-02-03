@@ -1,13 +1,15 @@
 import { Request, Response, Router } from "express";
 import validateUserRegister from "../middlewares/userRegister.middleware";
 import validateUserLogin from "../middlewares/userLogin.middleware";
-import { addToCart, getCart, getSession, login, logout, registerUser, removeAllFromCart, removeFromCart } from "../controllers/user.controller";
+import { addToCart, getCart, getSession, login, logout, registerUser, removeAllFromCart, removeFromCart, updateProfile } from "../controllers/user.controller";
 import checkLogin from "../middlewares/checkLogin.middleware";
 import { OrderRepository } from "../repositories/order.repository";
 
 const usersRouter = Router();
 
 usersRouter.post("/register", validateUserRegister, registerUser);
+
+usersRouter.put("/profile", checkLogin, updateProfile);
 
 usersRouter.post("/logout", logout);
 

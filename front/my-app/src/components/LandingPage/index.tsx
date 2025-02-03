@@ -20,7 +20,6 @@ export default function LandingPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // 🔹 Mejor rendimiento en móviles reduciendo el blur en pantallas pequeñas
   const blurIntensity = Math.min(scrollY / 300, 1);
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const backgroundStyle = {
@@ -55,7 +54,7 @@ export default function LandingPage() {
 
       <div className="relative z-10 bg-gray-50 py-8 px-4">
         <CarouselComponent>
-          {products.map(({ id, name, price, image, description }) => (
+          {products.map(({ id, name, price, image, description, category }) => (
             <LandingPagePC
               key={id}
               id={id}
@@ -63,6 +62,7 @@ export default function LandingPage() {
               price={price}
               image={image}
               description={description}
+              category={category.name}
             />
           ))}
         </CarouselComponent>

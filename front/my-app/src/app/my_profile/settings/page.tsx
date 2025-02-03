@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/usersContext";
 import { ModifyFormInputs, modifySchema } from "@/validations/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
@@ -63,8 +64,12 @@ export default function Settings() {
         }
     }, [success]);
 
-    const onSubmit = (data: ModifyFormInputs) => {
-        console.log("Form Data:", data);
+    const onSubmit = async (data: ModifyFormInputs) => {
+        try {
+        await axios.put(`/api/users/profile`, data);
+        } catch (error) {
+            throw new AxiosError("Error updating profile");
+        }
         setSuccess("Settings updated successfully!");
         setIsEditing({
             name: false,
