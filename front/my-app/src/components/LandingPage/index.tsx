@@ -36,8 +36,8 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="relative w-screen">
-      <div className="relative h-[100vh] overflow-hidden">
+    <div className="relative w-full min-h-screen">
+      <div className="relative overflow-hidden">
         <Image
           src="/4.jpg"
           alt="Background"
@@ -52,7 +52,7 @@ export default function LandingPage() {
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-gray-50"></div>
       </div>
 
-      <div className="relative z-30 bg-gray-50 py-8 px-4">
+      <div className="relative z-10 bg-gray-50 py-8 px-4">
         <CarouselComponent>
           {products.map(({ id, name, price, image, description, category }) => (
             <LandingPagePC

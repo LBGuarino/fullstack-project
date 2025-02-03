@@ -81,9 +81,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const logout = async () => {
     try {
       await axios.post("/api/users/logout", null, { withCredentials: true });
-    } finally {
       setUser(null);
-      window.location.href = "/login"; // ✅ Se maneja solo aquí
+    } finally {
+      window.location.href = "/login";
     }
   };
 

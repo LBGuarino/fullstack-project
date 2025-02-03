@@ -6,9 +6,11 @@ export const ShoppingCartPC: React.FC<{ item: CartItem }> = ({
     item: { product: { name, price, image, id }, quantity }
   }) => {
     const { updateQuantity } = useCartContext();
+
+    const productId = id;
     
     const handleRemoveFromCart = () => {
-        updateQuantity(id, quantity - 1);
+        updateQuantity(productId, quantity - 1);
     };
 
     return (
