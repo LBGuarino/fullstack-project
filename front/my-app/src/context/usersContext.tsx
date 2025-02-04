@@ -82,17 +82,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       await axios.post("/api/users/logout", null, { 
         withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-        }
       });
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-      window.location.assign('/login');
       setUser(null);
       setError(null);
       setOrders([]);
+      window.location.href = "/";
     } catch (error) {
       const err = error as AxiosError;
       setError(err.message || "Logout failed");

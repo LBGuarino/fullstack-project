@@ -31,9 +31,19 @@ export interface LandingPagePCProps {
 
     return (
       <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
-        <div className="h-full w-full align-middle flex justify-center">
-          <Link href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}>
-          <Image src={image} alt={name} width={400} height={400} className="h-1/2 w-1/2 object-cover" />
+        <div className="relative flex-grow group">
+          <Link 
+          href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}
+          className="block h-full w-full"
+          >
+          <div className="relative pt-[100%]">
+            <Image 
+            src={image} 
+            alt={name} 
+            className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </div>
           </Link>
         </div>
   
