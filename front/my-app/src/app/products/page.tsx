@@ -40,7 +40,7 @@ export default function LandingPage() {
   return (
     <div className="max-w-screen-xl mx-auto p-8">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Sort by:</h2>
+        <h2 className="text-lg font-light">Sort by:</h2>
         <select
           value={sortOrder}
           onChange={handleSortChange}
