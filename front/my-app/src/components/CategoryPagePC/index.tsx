@@ -33,7 +33,7 @@ export const CategoryPagePC: React.FC<CategoryPagePCProps> = ({
   return (
     <AnimatedPage>
       <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col h-full">
-        <div className="h-40 sm:h-52 md:h-64 lg:h-72 xl:h-80 flex justify-center items-center bg-gray-50">
+        <div className="h-40 sm:h-52 md:h-64 lg:h-72 xl:h-80 flex justify-center items-center">
           <Link href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}>
             <Image
               src={image}
