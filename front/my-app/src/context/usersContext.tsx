@@ -1,12 +1,11 @@
 'use client';
 
-import { createContext, useState, useContext, useEffect, useCallback, use } from "react";
+import { createContext, useState, useContext, useEffect, useCallback } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthProviderProps, IAuthContextProps } from "./AuthContextProps";
 import { ILoggedUser } from "@/interfaces/ILoggedUser";
 import { ILogin } from "@/interfaces/ILogin";
 import { IOrder } from "@/interfaces/IOrder";
-import { set } from "zod";
 
 const AuthContext = createContext<IAuthContextProps>({
   user: null,

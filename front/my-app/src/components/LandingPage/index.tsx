@@ -68,14 +68,6 @@ export default function LandingPage() {
           ))}
         </CarouselComponent>
       </div>
-
-      {/* <div>
-        {products.sort((a, b) => b.price - a.price).map(product => (
-          <div key={product.id}>
-            {product.name} {product.price}
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 }
