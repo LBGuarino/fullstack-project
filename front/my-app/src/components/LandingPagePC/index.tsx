@@ -41,7 +41,8 @@ export interface LandingPagePCProps {
             src={image} 
             alt={name} 
             className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            height={400}
+            width={400}
             />
           </div>
           </Link>
