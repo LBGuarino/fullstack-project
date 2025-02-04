@@ -1,11 +1,12 @@
 'use client';
 
-import { createContext, useState, useContext, useEffect, useCallback } from "react";
+import { createContext, useState, useContext, useEffect, useCallback, use } from "react";
 import axios, { AxiosError } from "axios";
 import { AuthProviderProps, IAuthContextProps } from "./AuthContextProps";
 import { ILoggedUser } from "@/interfaces/ILoggedUser";
 import { ILogin } from "@/interfaces/ILogin";
 import { IOrder } from "@/interfaces/IOrder";
+import { set } from "zod";
 
 const AuthContext = createContext<IAuthContextProps>({
   user: null,
@@ -80,8 +81,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await axios.post("/api/users/logout", null, { withCredentials: true });
+      await axios.post("/api/users/logout", null, { 
+        withCredentials: true 
+      });
       setUser(null);
+      setError(null);
+      setOrders([]);
+    } catch (error) {
+      const err = error as AxiosError;
+      setError(err.message || "Logout failed");
     } finally {
       window.location.href = "/login";
     }

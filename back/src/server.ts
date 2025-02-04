@@ -9,8 +9,8 @@ const app = express();
 app.set("trust proxy", 1);
 app.use(cors({
   origin: [
-    'https://www.thescentedshop.blog', // Subdominio principal
-    'https://thescentedshop.blog', // Dominio raíz
+    'https://www.thescentedshop.blog',
+    'https://thescentedshop.blog',
     'http://localhost:3000'
   ],
   credentials: true,

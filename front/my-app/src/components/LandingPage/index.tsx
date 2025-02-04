@@ -21,7 +21,7 @@ export default function LandingPage() {
   }, []);
 
   const blurIntensity = Math.min(scrollY / 300, 1);
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
   const backgroundStyle = {
     filter: isMobile ? "none" : `blur(${blurIntensity * 10}px)`,
     backdropFilter: isMobile ? "none" : `blur(${blurIntensity * 10}px)`,
@@ -37,11 +37,12 @@ export default function LandingPage() {
 
   return (
     <div className="relative w-full min-h-screen">
-      <div className="relative overflow-hidden">
+      <div className="relative h-[80vh] md:h-[100vh] overflow-hidden">
         <Image
           src="/4.jpg"
           alt="Background"
           fill
+          className="z-0"
           style={{
             objectFit: "cover",
             objectPosition: "center",
@@ -49,7 +50,7 @@ export default function LandingPage() {
           }}
           priority
         />
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-gray-50"></div>
+        <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-b from-transparent via-transparent to-gray-50"></div>
       </div>
 
       <div className="relative z-10 bg-gray-50 py-8 px-4">
@@ -67,6 +68,14 @@ export default function LandingPage() {
           ))}
         </CarouselComponent>
       </div>
+
+      {/* <div>
+        {products.sort((a, b) => b.price - a.price).map(product => (
+          <div key={product.id}>
+            {product.name} {product.price}
+          </div>
+        ))}
+      </div> */}
     </div>
   );
 }
