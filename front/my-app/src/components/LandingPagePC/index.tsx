@@ -36,7 +36,7 @@ export interface LandingPagePCProps {
           href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}
           className="block h-full w-full"
           >
-          <div className="relative pt-[100%]">
+          <div className="relative justify-center items-center flex h-full w-full">
             <Image 
             src={image} 
             alt={name} 
