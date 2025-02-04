@@ -52,14 +52,11 @@ export const login = catchedController(async (req: Request, res: Response) => {
     sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7,
     path: '/',
-    domain: isProduction ? '.thescentedshop.blog' : undefined,
+    domain: '.thescentedshop.blog',
   })
   res.status(200).send({
     login: true,
     user: user.user,
-    debug: {
-      cookieDomain: isProduction ? '.thescentedshop.blog' : 'localhost'
-    }
   });
 });
 
@@ -111,6 +108,7 @@ export const logout = catchedController(async (req: Request, res: Response) => {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
+    domain: '.thescentedshop.blog'
   });
   return res.json({ message : 'Logout successful' });
 });

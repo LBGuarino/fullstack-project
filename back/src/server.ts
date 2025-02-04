@@ -15,9 +15,11 @@ app.use(cors({
   ],
   credentials: true,
   exposedHeaders: ["set-cookie"],
-  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie", "X-Requested-With"],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   maxAge: 86400,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));  
 app.use(express.json());
 app.use(morgan("dev"));
