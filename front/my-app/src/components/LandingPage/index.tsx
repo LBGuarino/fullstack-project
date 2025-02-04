@@ -37,23 +37,19 @@ export default function LandingPage() {
 
   return (
     <div className="relative w-full min-h-screen">
-      <div className="relative h-[80vh] md:h-[100vh] overflow-hidden">
+      <div className="relative h-[60vh] sm:h-[80vh] md:h-[100vh] overflow-hidden">
         <Image
           src="/4.jpg"
           alt="Background"
           fill
-          className="z-0"
-          style={{
-            objectFit: "cover",
-            objectPosition: "center",
-            ...backgroundStyle,
-          }}
+          className="z-0 object-cover object-center"
+          style={backgroundStyle}
           priority
         />
-        <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-b from-transparent via-transparent to-gray-50"></div>
+        <div className="absolute bottom-0 left-0 w-full h-32 sm:h-48 bg-gradient-to-b from-transparent via-transparent to-gray-50"></div>
       </div>
 
-      <div className="relative z-10 bg-gray-50 py-8 px-4">
+      <div className="relative z-10 bg-gray-50 py-4 sm:py-8 px-2 sm:px-4 md:px-8">
         <CarouselComponent>
           {products.map(({ id, name, price, image, description, category }) => (
             <LandingPagePC

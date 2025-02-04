@@ -30,13 +30,12 @@ export interface LandingPagePCProps {
     };
 
     return (
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
-        <div className="relative flex-grow group">
+      <div className="bg-white rounded-lg shadow-md hover:shadow-xl overflow-hidden transition-shadow duration-300">
+        <div className="relative group aspect-square sm:aspect-[4/3]">
           <Link 
           href={`/products/${category}/${name.toLowerCase().replaceAll(' ', '-')}`}
           className="block h-full w-full"
           >
-          <div className="relative justify-center items-center flex h-full w-full">
             <Image 
             src={image} 
             alt={name} 
@@ -44,15 +43,14 @@ export interface LandingPagePCProps {
             height={300}
             width={300}
             />
-          </div>
           </Link>
         </div>
   
-        <div className="p-4 flex flex-col gap-2">
-          <h3 className="text-lg font-semibold text-gray-800 truncate">
+        <div className="p-3 sm:p-4 flex flex-col gap-2">
+          <h3 className="text-md sm:text-lg font-semibold text-gray-800 truncate">
             {name}
           </h3>
-          <p className="text-xl font-bold text-cyan-600">${price.toFixed(2)}</p>
+          <p className="text-lg sm:text-xl font-bold text-cyan-600">${price.toFixed(2)}</p>
           <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
           <div className="flex items-center mt-2">
           <ProductCounter
@@ -62,7 +60,7 @@ export interface LandingPagePCProps {
           </div>
           <button
           onClick={handleAddToCart} 
-          className="mt-4 bg-cyan-700 text-white py-2 px-0 w-1/2 rounded-full hover:bg-cyan-800 transition-colors">
+          className="mt-4 bg-cyan-700 text-white py-2 px-4 w-full sm:w-1/2 rounded-full hover:bg-cyan-800 transition-colors">
             Add to cart
           </button>
         </div>
