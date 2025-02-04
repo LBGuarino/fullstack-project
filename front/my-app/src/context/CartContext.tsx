@@ -110,24 +110,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const updateQuantity = async (productId: number, quantity: number) => {
+    const updateQuantity = async (productId: number, newQuantity: number) => {
         setLoading(true);
         setError(null);
         try {
+          if (newQuantity < 1) {
+            await axios.delete(`/api/users/cart/${productId}`, { 
+              withCredentials: true 
+            });
+          } else {
             await axios.patch(
-                `/api/users/cart/${productId}`,
-                { quantity },
-                { withCredentials: true }
+              `/api/users/cart/${productId}`,
+              { quantity: newQuantity },
+              { withCredentials: true }
             );
-            await fetchCart();
+          }
+          await fetchCart();
         } catch (err) {
-            setError("Error updating quantity");
-            console.error(err);
+          setError("Error updating quantity");
+          console.error(err);
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
-
+      };
+      
     const clearCart = async () => {
         setLoading(true);
         setError(null);

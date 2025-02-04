@@ -7,6 +7,7 @@ import {
   registerUserService,
   removeAllFromCartService,
   removeFromCartService,
+  updateCartItemService,
 } from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/envs";
@@ -130,6 +131,22 @@ export const addToCart = catchedController(async (req: Request, res: Response) =
   }
 
   const cart = await addToCartService({ userId, productId, quantity });
+  res.status(200).send(cart);
+});
+
+export const updateCartItem = catchedController(async (req: Request, res: Response) => {
+  const userId = req.user?.id;
+  const productId = parseInt(req.params.productId, 10);
+  const { quantity } = req.body;
+
+  if (!userId) {
+    throw new ClientError("User not authenticated", 401);
+  }
+  if (isNaN(productId)) {
+    throw new ClientError("Invalid product ID", 400);
+  }
+
+  const cart = await updateCartItemService({ productId, quantity, userId });
   res.status(200).send(cart);
 });
 

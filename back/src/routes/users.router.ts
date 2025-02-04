@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import validateUserRegister from "../middlewares/userRegister.middleware";
 import validateUserLogin from "../middlewares/userLogin.middleware";
-import { addToCart, getCart, getSession, login, logout, registerUser, removeAllFromCart, removeFromCart, updateProfile } from "../controllers/user.controller";
+import { addToCart, getCart, getSession, login, logout, registerUser, removeAllFromCart, removeFromCart, updateCartItem, updateProfile } from "../controllers/user.controller";
 import checkLogin from "../middlewares/checkLogin.middleware";
 import { OrderRepository } from "../repositories/order.repository";
 
@@ -24,6 +24,8 @@ usersRouter.get("/orders", checkLogin, async (req: Request, res: Response) => {
 
   res.send(orders);
 });
+
+usersRouter.patch("/cart/:productId", checkLogin, updateCartItem);
 
 usersRouter.get('/cart', checkLogin, getCart);
 

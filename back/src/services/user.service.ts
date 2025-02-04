@@ -102,6 +102,29 @@ export const addToCartService = async ({ userId, productId, quantity }: { userId
   return userCart;
 };
 
+export const updateCartItemService = async ({ productId, quantity, userId }: { productId: number, quantity: number, userId: number }): Promise<Cart> => { 
+  const userCart = await CartRepository.findOne({
+    where: { user: { id: userId } },
+    relations: ["items", "items.product"],
+  });
+  if (!userCart) {
+    throw new ClientError("Cart not found");
+  }
+
+  const cartItem = userCart.items.find((item) => item.product.id === productId);
+  if (!cartItem) {
+    throw new ClientError("Product not in cart");
+  }
+
+  if (quantity > 0) {
+    cartItem.quantity = quantity;
+  } else {
+    await CartItemRepository.remove(cartItem);
+  }
+  await CartItemRepository.save(cartItem);
+  return userCart;
+};
+
 export const removeFromCartService = async ({ productId, userId }: { productId: number, userId: number }): Promise<Cart> => {
   const userCart = await CartRepository.findOne({
     where: { user: { id: userId } },

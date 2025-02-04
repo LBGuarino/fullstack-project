@@ -9,10 +9,11 @@ export const ShoppingCartPC: React.FC<{ item: CartItem }> = ({
 
     const productId = id;
     
-    const handleRemoveFromCart = () => {
-        updateQuantity(productId, quantity - 1);
-    };
-
+    const handleQuantityChange = (newQuantity: number) => {
+        if (newQuantity >= 0) {
+          updateQuantity(productId, newQuantity);
+        }
+      };
     return (
     <>
         <div className="bg-white rounded-md shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center p-3 gap-4" key={id}>
@@ -28,12 +29,21 @@ export const ShoppingCartPC: React.FC<{ item: CartItem }> = ({
                 </div>
             </div>
 
-            <button onClick={handleRemoveFromCart}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
+            <div className="flex items-center gap-2">
+            <button 
+            onClick={() => handleQuantityChange(quantity - 1)}
+            className="px-2 py-1 bg-gray-100 rounded"
+            >
+            -
             </button>
-
+            <span>{quantity}</span>
+            <button 
+            onClick={() => handleQuantityChange(quantity + 1)}
+            className="px-2 py-1 bg-gray-100 rounded"
+            >
+            +
+            </button>
+            </div>
         </div>
     </>
     )

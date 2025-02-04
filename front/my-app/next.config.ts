@@ -28,40 +28,37 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
-      // Auth endpoints
       {
         source: '/api/auth/:path*',
         destination: `${BACKEND_URL}/users/:path*`
       },
-      // Users management
       {
         source: '/api/users/:path*',
         destination: `${BACKEND_URL}/users/:path*`
       },
-      // Products routes
       {
         source: '/api/products/:path*',
         destination: `${BACKEND_URL}/products/:path*`
       },
-      // Orders management
       {
         source: '/api/orders/:path*',
         destination: `${BACKEND_URL}/orders/:path*`
       },
-      // Payment processing
       {
         source: '/api/payment/:path*',
         destination: `${BACKEND_URL}/payment/:path*`
       },
-      // Redirect legacy auth endpoints
       {
         source: '/api/:action(login|logout|register|session)',
         destination: `${BACKEND_URL}/users/:action`
       },
-      // Catch-all para otras rutas de API
       {
         source: '/api/:path*',
         destination: `${BACKEND_URL}/:path*`
+      },
+      {
+        source: '/api/users/cart/:productId',
+        destination: `${BACKEND_URL}/users/cart/:productId`
       }
     ];
   },
