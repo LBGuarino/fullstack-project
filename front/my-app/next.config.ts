@@ -68,7 +68,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: 'api/:path*',
+        source: '/:path*',
         headers: [
           {
             key: 'X-Content-Type-Options',
