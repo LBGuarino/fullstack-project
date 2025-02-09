@@ -1,0 +1,26 @@
+testing front end c/jest
+
+function fetchData() {
+    return fetch('https://jsonplaceholder.typicode.com/todos/1')
+        .then(response => response.json())
+        .then(data => data);
+}
+
+export default function
+
+async function fetchData() {
+    return fetch('https://jsonplaceholder.typicode.com/todos/1')
+        .then(response => response.json())
+        .then(data => data);
+}
+
+test('fetchesdata', async () => {
+    global.fetch = jest.fn().(() => 
+    Promise.resolve({
+        json: () => Promise.resolve({
+            data: "data"
+        })
+    }))
+    const data = await fetchData();
+    expect(data).toBe("data");
+})

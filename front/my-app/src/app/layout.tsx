@@ -3,6 +3,11 @@ import { fetchDropdownData } from "@/helpers/fetchData";
 import Providers from "./providers";
 import { Footer } from "@/components/Footer";
 
+export const metadata = {
+  title: "Hi-Tec",
+  description: "Hi-Tec. The Digital of Things",
+};
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const dropdownProps = await fetchDropdownData();
 
